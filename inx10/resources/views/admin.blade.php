@@ -1013,6 +1013,13 @@
                         </script>
 
                 </div>
+
+                <!-- Submit Button -->
+                <div class="flex justify-end mt-8">
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                        Submit
+                    </button>
+                </div>
                 </form>
 
 
