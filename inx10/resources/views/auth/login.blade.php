@@ -1,3 +1,4 @@
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,6 +8,7 @@
     @vite('resources/css/app.css')
     
 </head>
+
 <body class="flex items-center justify-center" style="background-image: url('images/login_main_bg.jpg'); background-size: cover; background-position: center; ">
     <div class="bg-white shadow-md rounded-lg flex max-w-4xl mx-auto overflow-hidden">
         <div class="w-1/2 bg-blue-100 flex flex-col justify-center items-center">
@@ -20,14 +22,14 @@
                     You must be an employee or MCR Industries Incorporated to login and access the site.
                 </p>
             </div>
-            <form action="" method="POST">
+            <form action="{{ route('login') }}" method="POST">
                 @csrf
                 <div class="rounded-md shadow-sm">
                     <div class="mb-4">
-                        <label for="email" class="sr-only">Email address</label>
-                        <input id="email" name="email" type="email" required
+                        <label for="user_ID" class="sr-only">User ID</label>
+                        <input id="user_ID" name="user_ID" type="text" required
                             class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                            placeholder="Enter your account...">
+                            placeholder="Enter your User ID...">
                     </div>
                     <div class="mb-4">
                         <label for="password" class="sr-only">Password</label>
