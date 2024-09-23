@@ -33,7 +33,7 @@
 </head>
 
 
-<body class="bg-[#ededed] dark:bg-gray-900 dark:opacitiy-70 flex">
+<body class="bg-[#ededed] dark:bg-gray-900 flex">
     <!--user profile-->
     <div class="flex w-full flex-row justify-end space-x-2 items-center mb-7 fixed right-5 top-7">
         <button class="hover:scale-110 transition duration-200">
@@ -56,7 +56,7 @@
                     <button class="w-full text-left px-4 py-2 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700" onclick="navigateTo('settings', this)">
                         Settings
                     </button>
-                    <form action="{{ route('logout') }}" method="POST" id="logoutForm">
+                    <form action="{{ route('logout') }}" method="POST" id="logoutForm"  onsubmit="showLoadingSpinner()">
                         @csrf
                         <button type="submit" class="w-full text-left px-4 py-2 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                             Logout
@@ -236,21 +236,65 @@
                             <img src="{{ URL('images/search.png') }}" alt="search" class="w-7 h-7">
                         </button>
                     </div>
+
     <!--number of emp, pending, next pay date-->
+                    @php
+                     $today = now();
+                       if ($today->day <= 5) {
+                            $nextPayDate = $today->copy()->day(5);
+                        } elseif ($today->day <= 20) {
+                            $nextPayDate = $today->copy()->day(20);
+                        } else {
+                            // If today's date is after the 20th, the next payday will be the 5th of the next month
+                            $nextPayDate = $today->copy()->addMonth()->day(5);
+                        }
+                        $isPayday = ($today->day === 5 || $today->day === 20);
+                    @endphp
+
                     <div class="flex w-full flex-row gap-3 justify-center mb-4">
                         <div class="flex flex-col items-center bg-white dark:bg-gray-700 p-4 w-full h-auto rounded-2xl shadow-xl">
                             <h1 class="text-sm font-medium dark:text-white">Number of Employees</h1>
-                            <p class="text-2xl font-bold font-sans dark:text-white">345</p>
+                            <p id="employee-count" class="text-2xl font-bold font-sans dark:text-white">Loading...</p>
                         </div>
                         <div class="flex flex-col items-center bg-white dark:bg-gray-700 p-4 w-full h-auto rounded-2xl shadow-xl">
                             <h1 class="text-sm font-medium dark:text-white">Pending Requests</h1>
                             <p class="text-2xl font-bold font-sans dark:text-white">3</p>
                         </div>
                         <div class="flex flex-col items-center bg-white dark:bg-gray-700 p-4 w-full h-auto rounded-2xl shadow-xl">
+                        @if($isPayday)
+                            <h1 class="text-2xl font-bold font-sans dark:text-white">It's pay day!!</h1>
+                        @else
                             <h1 class="text-sm font-medium dark:text-white">Next pay date</h1>
-                            <p class="text-2xl font-bold font-sans dark:text-white">03/20/2024</p>
+                            <p class="text-2xl font-bold font-sans dark:text-white">{{ $nextPayDate->format('m/d/Y') }}</p>
+                        @endif
                         </div>
                     </div>
+                    <!--script for the number of employees-->
+                    <script>
+                        function fetchEmployeeCount() {
+                            fetch('/employee-count')
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log('Data:', data); // Check this in the browser console
+                                    if (data.count !== undefined) {
+                                        document.getElementById('employee-count').textContent = data.count;
+                                    } else {
+                                        document.getElementById('employee-count').textContent = '0';
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching employee count:', error);
+                                    document.getElementById('employee-count').textContent = '0';
+                                });
+                        }
+
+                        // Fetch the employee count when the page loads
+                        document.addEventListener('DOMContentLoaded', fetchEmployeeCount);
+
+                        // Optionally, refresh the count every minute
+                        setInterval(fetchEmployeeCount, 60000); // 60000 ms = 1 minute
+                    </script>
+                
     <!--departments-->
                     <div class="flex flex-col w-full md:h-[40vh] bg-white dark:bg-gray-700 p-6 gap-3 justify-start shadow-lg rounded-2xl mb-3">
                         <div class="w-full h-auto flex items-center justify-between ">
@@ -1378,10 +1422,11 @@
     <section id="add-employee-content" class="section hidden w-full h-screen p-7">
 
         <div class="flex flex-row w-full h-[10vh] items-center justify-start">
-            <button class=" w-14 p-2 hover:scale-125 transition duration-200" onclick="navigateTo('dashboard', this)">
+            <button class=" w-14 p-2 hover:scale-125 transition duration-200" onclick="goBack()">
                 <img src="{{URL('images/goback.png')}}" alt="" data-light-src="{{URL('images/goback.png')}}" data-dark-src="{{URL('images/goback_dark.png')}}" class="w-12">
             </button>
         </div>
+        
     <!--FORM 201-->
         <div class="w-full bg-white dark:bg-gray-300 md:h-[85vh] h-[calc(100vh-100px)] rounded-lg overflow-y-auto p-4 shadow-2xl">
             <div class="bg-white dark:bg-gray-200 shadow-md rounded-lg overflow-hidden p-7 space-y-1">
@@ -1393,11 +1438,32 @@
                     <label class="block mb-2 text-sm font-medium text-gray-900 " for="file_input">Upload image</label>
                     <input class="block w-1/4 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file">
                 </div>
-                        <!--general form-->
-                <form action="#" method="POST" class="space-y-5">
+            </div>
 
+              <!--general form-->
+                <form action="{{ route('admin.InsertEmployeeData') }}" method="POST" class="space-y-5" onsubmit="showLoadingSpinner()">
+                    
+                    <!--choosing a designated department for a employee-->
+                    <div class="p-5">
+                        <label for="department" class="block text-sm font-medium text-gray-600">Designated Department:</label>
+                        <select id="department" name="department" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500">
+                            <option value="" disabled selected>Select a department</option>
+                            @foreach ($departments as $department)
+                                <option value="{{ $department->department_ID }}">{{ $department->department_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @csrf
+
+                    @if (session()->has('errors'))
+                        <div class="text-red-500 text-sm mb-4">
+                            {{ session('errors')->first() }}
+                        </div>
+                    @endif
                         <!--personal information section-->
                     <div class="p-5">
+
+                    
                         <h3 class="text-lg font-medium text-gray-800 text-left">-Personal Information-</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                             <div>
@@ -1417,7 +1483,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                             <div>
                                 <label for="birthday" class="block text-sm font-medium text-gray-600">Birth date:</label>
-                                <input type="text" id="w_birthdate" name="birthdate" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Birth date" required>
+                                <input type="date" id="w_birthdate" name="birthdate" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Birth date" required>
                             </div>
                             <div>
                                 <label for="birthplace" class="block text-sm font-medium text-gray-600">Birth place:</label>
@@ -1425,7 +1491,11 @@
                             </div>
                             <div>
                                 <label for="civilstatus" class="block text-sm font-medium text-gray-600">Civil Status:</label>
-                                <input type="text" id="w_civilstatus" name="civilstatus" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Civil status" required>
+                                <select id="w_civilstatus" name="civilstatus" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" required>
+                                    <option value="" disabled selected>Select your civil status</option>
+                                    <option value="Single">Single</option>
+                                    <option value="Married">Married</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -1444,7 +1514,7 @@
                             </div>
                             <div>
                                 <label for="telephoneNo" class="block text-sm font-medium text-gray-600">Telephone Number:</label>
-                                <input type="text" id="w_telephoneNum" name="TelephoneNumber" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Telephone Number" required>
+                                <input type="text" id="w_telephoneNum" name="telephoneNumber" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Telephone Number" required>
                             </div>
                         </div>
 
@@ -1468,8 +1538,11 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                                 <div>
                                     <label for="sssid" class="block text-sm font-medium text-gray-600">SSS ID:</label>
-                                    <input type="text" id="w_sss" name="sssId" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="00-0000000-0" maxlength="12" required>
+                                    <input type="text" id="w_sss" name="sssId" value="{{ old('sssId') }}" class="w-full mt-2 p-2 border rounded-md @error('sssId') border-red-500 @enderror" placeholder="00-0000000-0" maxlength="12" required>
                                     <p id="sssError" class="text-red-500 text-sm hidden">Continue typing until the designated format are met.  (00-0000000-0).</p>
+                                    @error('sssId')
+                                        <p class="text-red-500 text-sm">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div>
                                     <label class="block mb-2 text-sm font-medium text-gray-900 " for="file_input">Upload scanned files <span class="text-sm italic font-normal">*if available</span></label>
@@ -1481,8 +1554,11 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                                 <div>
                                     <label for="philhealthid" class="block text-sm font-medium text-gray-600">PhilHealth ID:</label>
-                                    <input type="text" id="w_philhealth" name="philhealthId" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="00-00000000-0" maxlength="13" required>
+                                    <input type="text" id="w_philhealth" name="philhealthId" value="{{ old('philhealthId')}}" class="w-full mt-2 p-2 border rounded-md @error('philhealthId') border-gray-300 @enderror " placeholder="00-00000000-0" maxlength="13" required>
                                     <p id="philhealthError" class="text-red-500 text-sm hidden">Continue typing until the designated format are met.  (00-00000000-0).</p>
+                                    @error('philhealthId')
+                                        <p class="text-red-500 text-sm">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
 
@@ -1490,8 +1566,11 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                                 <div>
                                     <label for="Pagibig" class="block text-sm font-medium text-gray-600">PAGIBIG:</label>
-                                    <input type="text" id="w_pagibig" name="Pagibig" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="0000-0000-0000" maxlength="14" required>
+                                    <input type="text" id="w_pagibig" name="Pagibig" value="{{ old('Pagibig') }}" class="w-full mt-2 p-2 border rounded-md @error('Pagibig') border-gray-300 @enderror" placeholder="0000-0000-0000" maxlength="14" required>
                                     <p id="pagibigError" class="text-red-500 text-sm hidden">Continue typing until the designated format are met.  (0000-0000-0000).</p>
+                                    @error('Pagibig')
+                                        <p class="text-red-500 text-sm">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
 
@@ -1499,8 +1578,11 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                                 <div>
                                     <label for="TIN" class="block text-sm font-medium text-gray-600">TIN Number:</label>
-                                    <input type="text" id="w_tin" name="TINno" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="000-000-000-000" maxlength="15" required>
+                                    <input type="text" id="w_tin" name="TINno" value="{{ old('TINno') }}" class="w-full mt-2 p-2 border rounded-md @error('TINno') border-gray-300 @enderror" placeholder="000-000-000-000" maxlength="15" required>
                                     <p id="tinError" class="text-red-500 text-sm hidden">Continue typing until the designated format are met.  (000-000-000-000).</p>
+                                    @error('TINno')
+                                        <p class="text-red-500 text-sm">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -2400,7 +2482,6 @@
         </div>
     </div>
 
-
     <!--help evaluation modal-->
     <div id="helpModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
         <!-- Modal Content -->
@@ -2456,6 +2537,22 @@
         </div>
     </div>
 
+            <!--loading spinner-->
+            <div class="fixed inset-0 flex items-center justify-center bg-gray-100 z-50 hidden" id="loading-spinner">
+                <div class="flex flex-row gap-2">
+                    <span class='sr-only'>Loading...</span>
+                    <div class='h-8 w-8 bg-green-500 rounded-full animate-bounce [animation-delay:-0.3s]'></div>
+                    <div class='h-8 w-8 bg-violet-600 rounded-full animate-bounce [animation-delay:-0.15s]'></div>
+                    <div class='h-8 w-8 bg-red-500 rounded-full animate-bounce'></div>
+                </div>
+            </div>
+
+            <script>
+                function showLoadingSpinner() {
+                    document.getElementById('loading-spinner').classList.remove('hidden');
+                }
+            </script>
+    
     <!--script of announce Modal-->
     <script>
         document.getElementById('announcementButton').addEventListener('click', function() {
@@ -2518,9 +2615,13 @@
             button.addEventListener('click', () => toggleSearchModal(true));
         });
     </script>
+
+    <!--Deparment Section-->
     
-    <!--scripts for sections-->
+   <!--scripts for sections-->
     <script>
+        let lastSection = 'dashboard'; // Default starting section
+
         // Function to handle navigation clicks
         function navigateTo(sectionId, element) {
             // Hide all sections
@@ -2533,7 +2634,11 @@
             const activeSection = document.getElementById(sectionId + '-content');
             if (activeSection) {
                 activeSection.classList.add('active');
-                
+            }
+
+            // Save the current section as the last section before moving
+            if (sectionId !== 'add-employee') {
+                lastSection = sectionId;
             }
 
             // Update the document title based on the clicked element
@@ -2547,12 +2652,17 @@
             element.classList.add('font-bold');
         }
 
+        // Function to handle the "Go Back" button in the Add Employee section
+        function goBack() {
+            // Navigate to the last section stored
+            navigateTo(lastSection, document.querySelector(`[data-toggle-section="${lastSection}"]`));
+        }
+
         // Initial load: Activate the default section (Dashboard)
         document.addEventListener('DOMContentLoaded', () => {
             navigateTo('dashboard', document.querySelector('.sidebar-item'));
         });
     </script>
-
 
 </body>
 </html>
