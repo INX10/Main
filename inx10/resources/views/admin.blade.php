@@ -27,6 +27,12 @@
           .blur-content > *:not(#searchModal) {
             filter: blur(5px);
         }
+
+        /* Add this to your CSS file or in a <style> tag in your HTML */
+        .pre-wrap {
+            white-space: pre-wrap; /* Preserve whitespace and line breaks */
+            word-wrap: break-word; /* Allow long words to break */
+        }
     </style>
 
     
@@ -34,39 +40,39 @@
 
 
 <body class="bg-[#ededed] dark:bg-gray-900 flex">
-    <!--user profile-->
-    <div class="flex w-full flex-row justify-end space-x-2 items-center mb-7 fixed right-5 top-7">
-        <button class="hover:scale-110 transition duration-200">
-            <img src="{{URL('images/defaultprofpic.png')}}" alt="" class="w-9 h-9">
-        </button>
-        <h2 class="text-lg dark:text-white">Ryan Mark Luis</h2>
-        <div x-data="{ open: false }" class="relative">
-            <button @click.stop="open = !open" class="hover:scale-110 transition duration-200">
-                <img src="{{URL('images/dropdownprofile.png')}}" 
-                    data-light-src="{{URL('images/dropdownprofile.png')}}" 
-                    data-dark-src="{{URL('images/dropdownprofile_dark.png')}}" 
-                    alt="" 
-                    class="w-9 h-9">
+    
+    <!-- User Profile -->
+        <div class="flex w-full flex-row justify-end space-x-2 items-center mb-7 fixed right-5 top-7">
+            <button class="hover:scale-110 transition duration-200">
+                <img src="{{ URL('images/defaultprofpic.png') }}" alt="" class="w-9 h-9">
             </button>
-            <!-- Dropdown Menu -->
-           <!-- Dropdown Menu -->
-            <div x-show="open" @click.away="open = false" 
-                class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50">
-                <div class="py-2">
-                    <button class="w-full text-left px-4 py-2 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700" onclick="navigateTo('settings', this)">
-                        Settings
-                    </button>
-                    <form action="{{ route('logout') }}" method="POST" id="logoutForm"  onsubmit="showLoadingSpinner()">
-                        @csrf
-                        <button type="submit" class="w-full text-left px-4 py-2 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                            Logout
+            <h2 class="text-lg dark:text-white"></h2> <!-- Display user name -->
+            <div x-data="{ open: false }" class="relative">
+                <button @click.stop="open = !open" class="hover:scale-110 transition duration-200">
+                    <img src="{{ URL('images/dropdownprofile.png') }}" 
+                        data-light-src="{{ URL('images/dropdownprofile.png') }}" 
+                        data-dark-src="{{ URL('images/dropdownprofile_dark.png') }}" 
+                        alt="" 
+                        class="w-9 h-9">
+                </button>
+                <!-- Dropdown Menu -->
+                <div x-show="open" @click.away="open = false" 
+                    class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50">
+                    <div class="py-2">
+                        <button class="w-full text-left px-4 py-2 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700" onclick="navigateTo('settings', this)">
+                            Settings
                         </button>
-                    </form>
+                        <form action="{{ route('logout') }}" method="POST" id="logoutForm" onsubmit="showLoadingSpinner()">
+                            @csrf
+                            <button type="submit" class="w-full text-left px-4 py-2 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                                Logout
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
-
         </div>
-    </div>
+
     <!--side panel-->
     <aside class="w-1/4 h-screen bg-white dark:bg-gray-800 dark:opacity-80 shadow-lg  flex flex-col items-start p-4">
         <div class="mb-10 mt-5 flex justify-center">
@@ -305,36 +311,67 @@
                         </div>
     <!--department_inside-->
                         <div class="flex flex-row w-full h-auto gap-4">
+
                             <button class="flex flex-col w-full md:h-[30vh] bg-[#ededed] dark:bg-gray-600 p-4 items-center justify-center rounded-2xl shadow-lg hover:bg-gray-100 dark:hover:bg-gray-500 hover:scale-105 transition-all duration-300">
                                 <img src="{{URL('images/admin.png')}}" alt="admin_department" class="w-[10vh]">
                                 <h1 class="text-lg font-bold dark:text-white">ADMIN</h1>
                                 <p class="text-sm text-gray-400 dark:text-white">Total Employees:</p>
-                                <h1 class="text-4xl font-bold dark:text-white">10</h1>
+                               <h1 id="admin-count" class="text-4xl font-bold dark:text-white">Loading...</h1>
                             </button>
 
                             <button class="flex flex-col w-full md:h-[30vh] bg-[#ededed] dark:bg-gray-600 p-4 items-center justify-center rounded-2xl shadow-lg hover:bg-gray-100 dark:hover:bg-gray-500 hover:scale-105 transition-all duration-300">
                                 <img src="{{URL('images/msit.png')}}" alt="admin_department" class="w-[10vh]">
                                 <h1 class="text-lg font-bold dark:text-white">MS-IT</h1>
                                 <p class="text-sm text-gray-400 dark:text-white">Total Employees:</p>
-                                <h1 class="text-4xl font-bold dark:text-white">4</h1>
+                               <h1 id="msit-count" class="text-4xl font-bold dark:text-white">Loading...</h1>
                             </button>
-
+                    
                             <button class="flex flex-col w-full md:h-[30vh] bg-[#ededed] dark:bg-gray-600 p-4 items-center justify-center rounded-2xl shadow-lg hover:bg-gray-100 dark:hover:bg-gray-500 hover:scale-105 transition-all duration-300">
                                 <img src="{{URL('images/rollermill.png')}}" alt="admin_department" class="w-[10vh]">
                                 <h1 class="text-lg font-bold dark:text-white">ROLLER-MILL</h1>
                                 <p class="text-sm text-gray-400 dark:text-white">Total Employees:</p>
-                                <h1 class="text-4xl font-bold dark:text-white">13</h1>
+                                <h1 id="rollermill-count" class="text-4xl font-bold dark:text-white">Loading...</h1>
                             </button>
-
+                      
                             <button class="flex flex-col w-full md:h-[30vh] bg-[#ededed] dark:bg-gray-600 p-4 items-center justify-center rounded-2xl shadow-lg hover:bg-gray-100 dark:hover:bg-gray-500 hover:scale-105 transition-all duration-300">
                                 <img src="{{URL('images/technical.png')}}" alt="admin_department" class="w-[10vh]">
                                 <h1 class="text-lg font-bold dark:text-white">TECHNICAL</h1>
                                 <p class="text-sm text-gray-400 dark:text-white">Total Employees:</p>
-                                <h1 class="text-4xl font-bold dark:text-white">19</h1>
+                               <h1 id="technical-count" class="text-4xl font-bold dark:text-white">Loading...</h1>
                             </button>
 
                         </div>
                     </div>
+                <!--Script for counting employee in departments (dashboard overview only)-->
+                    <script>
+                        function fetchDepartmentEmployeeCounts() {
+                            fetch('/department-employee-counts')
+                                .then(response => response.json())
+                                .then(data => {
+                                    const counts = data.departmentEmployeeCounts;
+                                    
+                                    // Update the employee count for each department
+                                    document.getElementById('admin-count').textContent = counts[1] || '0'; // Admin department ID = 1
+                                    document.getElementById('msit-count').textContent = counts[2] || '0'; // MS-IT department ID = 2
+                                    document.getElementById('rollermill-count').textContent = counts[11] || '0'; // Roller-Mill department ID = 11
+                                    document.getElementById('technical-count').textContent = counts[7] || '0'; // Technical department ID = 7
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching department employee counts:', error);
+                                    // Set default 0 if there's an error
+                                    document.getElementById('admin-count').textContent = '0';
+                                    document.getElementById('msit-count').textContent = '0';
+                                    document.getElementById('rollermill-count').textContent = '0';
+                                    document.getElementById('technical-count').textContent = '0';
+                                });
+                        }
+
+                        // Fetch department employee counts when the page loads
+                        document.addEventListener('DOMContentLoaded', fetchDepartmentEmployeeCounts);
+
+                        // Optionally, refresh the count every minute
+                        setInterval(fetchDepartmentEmployeeCounts, 60000); // 60000 ms = 1 minute
+                    </script>
 
     <!--performance eval & activity logs-->
                     <div class="flex flex-row w-full h-auto gap-3">
@@ -525,11 +562,11 @@
     <!--announcements-->
                 <div class="w-full md:h-[35vh] bg-white dark:bg-gray-700 p-4 rounded-xl shadow-xl flex justify-center flex-col mb-3">
                 <div class="w-full flex items-center justify-center relative mb-3">
-                    <h1 class="text-2xl font-bold font-sans mx-auto flex-1 text-center dark:text-white">
+                    <h1 class="fixed text-2xl font-bold font-sans mx-auto flex-1 text-center dark:text-white">
                         ANNOUNCEMENTS
                     </h1>
-                    <button class="absolute right-0 hover:scale-125 transition-all duration-300">
-                        <img src="{{URL('images/rightmore.png')}}" alt="showmore-point" data-light-src="{{URL('images/rightmore.png')}}" data-dark-src="{{URL('images/rightmore_dark.png')}}" class="h-7 w-7">
+                    <button class="absolute right-0 hover:scale-125 transition-all duration-300" onclick="navigateTo('announcement', this)" data-toggle-section="announcement-content">
+                        <img src="{{URL('images/rightmore.png')}}" alt="showmore-point" data-light-src="{{URL('images/rightmore.png')}}" data-dark-src="{{URL('images/rightmore_dark.png')}}" class="h-7 w-7" >
                     </button>
                 </div>
                 <!-- TABLE FOR ANNOUNCEMENTS -->
@@ -541,58 +578,93 @@
                                 <th class="px-4 py-2 font-normal text-sm text-black opacity-60 w-1/4 text-center dark:text-white">Date</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <!-- Row 1 -->
-                            <tr class="border-b border-gray-200 hover:bg-gray-500 dark:border-white">
-                                <td class="px-4 py-2 text-sm font-medium text-gray-900 whitespace-nowrap relative group">
-                                    <a href=""><span class="dark:text-white">Annual Meeting for new applicants.</span></a>
-                                    <div class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-2 py-1 bg-gray-700 text-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                                        Annual meeting for new applicants this coming september 22, 2024
-                                    </div>
-                                </td>
-                                <td class="px-4 py-2 text-sm text-gray-700 text-right">
-                                    <span class="italic opacity-40 dark:text-white">08/06/2024</span>
-                                </td>
-                            </tr>
-                            <!-- Row 2 -->
-                            <tr class="border-b border-gray-200 hover:bg-gray-500 dark:border-white">
-                                <td class="px-4 py-2 text-sm font-medium text-gray-900 whitespace-nowrap relative group">
-                                    <a href=""><span class="dark:text-white">Annual Meeting for new applicants.</span></a>
-                                    <div class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-2 py-1 bg-gray-700 text-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                                        Annual meeting for new applicants this coming september 22, 2024
-                                    </div>
-                                </td>
-                                <td class="px-4 py-2 text-sm text-gray-700 text-right">
-                                    <span class="italic opacity-40 dark:text-white">08/06/2024</span>
-                                </td>
-                            </tr>
-                            <!-- Row 3 -->
-                            <tr class="border-b border-gray-200 hover:bg-gray-500 dark:border-white">
-                                <td class="px-4 py-2 text-sm font-medium text-gray-900 whitespace-nowrap relative group">
-                                    <a href=""><span class="dark:text-white">Annual Meeting for new applicants.</span></a>
-                                    <div class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-2 py-1 bg-gray-700 text-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                                        Annual meeting for new applicants this coming september 22, 2024
-                                    </div>
-                                </td>
-                                <td class="px-4 py-2 text-sm text-gray-700 text-right">
-                                    <span class="italic opacity-40 dark:text-white">08/06/2024</span>
-                                </td>
-                            </tr>
-                            <!-- Row 4 -->
-                            <tr class="border-b border-gray-200 hover:bg-gray-500 dark:border-white">
-                                <td class="px-4 py-2 text-sm font-medium text-gray-900 whitespace-nowrap relative group">
-                                    <a href=""><span class="dark:text-white">Annual Meeting for new applicants.</span></a>
-                                    <div class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-2 py-1 bg-gray-700 text-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                                        Annual meeting for new applicants this coming september 22, 2024
-                                    </div>
-                                </td>
-                                <td class="px-4 py-2 text-sm text-gray-700 text-right">
-                                    <span class="italic opacity-40 dark:text-white">08/06/2024</span>
-                                </td>
-                            </tr>
+                       <tbody id="announcement-list">
+                            <!-- Announcements will be dynamically inserted here -->
                         </tbody>
                     </table>
                 </div>
+
+                
+                    <!-- Modal Structure -->
+                <div id="announcementModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-gray-800 bg-opacity-50">
+                    <div class="bg-white rounded-lg p-4 w-11/12 md:w-auto p-6">
+                        <div class="flex flex-row items-center justify-start gap-2">
+                            <h1 class="text-lg text-black font-bold">Subject: </h1> 
+                            <h2 id="modalSubject" class="text-md"></h2>
+                        </div>
+                        <div class="flex flex-row items-center align-center justify-start gap-2">
+                            <h1 class="text-lg text-black font-bold">Body: </h1> 
+                            <h2 id="modalBody" class="text-md"></p>
+                        </div>
+                        <button id="closeModal" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Close</button>
+                    </div>
+                </div>
+
+                   
+                    <!--Script for announcement view-->
+                    <script>
+                        function fetchAnnouncements() {
+                            fetch('{{ route('admin.getAnnouncements') }}')
+                                .then(response => response.json())
+                                .then(data => {
+                                    const announcements = data.announcements;
+                                    const announcementList = document.getElementById('announcement-list');
+                                    announcementList.innerHTML = ''; // Clear the existing content
+
+                                    if (announcements.length > 0) {
+                                        announcements.forEach(announcement => {
+                                            const truncatedBody = truncateText(announcement.announce_body, 100); // Shorten the body to 100 characters
+                                            const row = `
+                                                <tr class="border-b border-gray-200 hover:bg-gray-200 dark:border-white">
+                                                    <td class="px-4 py-2 text-sm font-medium text-gray-900 whitespace-nowrap relative group">
+                                                        <a href="#" onclick="showAnnouncement('${announcement.announce_subject}', '${announcement.announce_body}')"><span class="dark:text-white">${announcement.announce_subject}</span></a>
+                                                        <div class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-2 py-1 bg-gray-700 text-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                                                            ${truncatedBody}
+                                                        </div>
+                                                    </td>
+                                                    <td class="px-4 py-2 text-sm text-gray-700 text-right">
+                                                        <span class="italic opacity-40 dark:text-white">${new Date(announcement.date).toLocaleDateString()}</span>
+                                                    </td>
+                                                </tr>
+                                            `;
+                                            announcementList.insertAdjacentHTML('beforeend', row);
+                                        });
+                                    } else {
+                                        announcementList.innerHTML = `<tr><td colspan="2" class="text-center py-4 text-gray-500">No announcements available</td></tr>`;
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching announcements:', error);
+                                    document.getElementById('announcement-list').innerHTML = `<tr><td colspan="2" class="text-center py-4 text-red-500">Error loading announcements</td></tr>`;
+                                });
+                        }
+
+                        function truncateText(text, maxLength) {
+                            if (text.length <= maxLength) return text;
+                            return text.substring(0, maxLength) + '...'; // Add ellipsis to indicate truncation
+                        }
+
+                        function showAnnouncement(subject, body) {
+                            // Populate the modal with announcement details
+                            document.getElementById('modalSubject').innerText = subject;
+                            document.getElementById('modalBody').innerText = body;
+
+                            // Show the modal
+                            document.getElementById('announcementModal').classList.remove('hidden');
+                        }
+
+                        // Close the modal when the close button is clicked
+                        document.getElementById('closeModal').addEventListener('click', function() {
+                            document.getElementById('announcementModal').classList.add('hidden');
+                        });
+
+                        // Fetch announcements when the page loads
+                        document.addEventListener('DOMContentLoaded', fetchAnnouncements);
+
+                        // Optionally, you can refresh the announcements list periodically
+                        setInterval(fetchAnnouncements, 60000); // Refresh every 1 minute
+                    </script>
+
                 </div>
 
     <!--birthday-->
@@ -1419,7 +1491,43 @@
     </section>
 
     <!--add employee section-->
-    <section id="add-employee-content" class="section hidden w-full h-screen p-7">
+    <section id="add-employee-content" class="section hidden w-full h-screen p-7" >
+
+        <div id="messageModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center hidden">
+            <div class="bg-white dark:bg-gray-200 p-6 rounded-lg shadow-lg w-1/3">
+                <div id="messageContent" class="text-center text-lg"></div>
+                <div class="flex justify-end mt-4">
+                    <button onclick="closeModal()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-md focus:outline-none">OK</button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                let successMessage = "{{ session('success') }}";
+                let errorMessage = "{{ session('error') }}";
+
+                if (successMessage || errorMessage) {
+                    let messageModal = document.getElementById('messageModal');
+                    let messageContent = document.getElementById('messageContent');
+
+                    if (successMessage) {
+                        messageContent.innerHTML = `<p class="text-green-500 font-bold">${successMessage}</p>`;
+                    } else if (errorMessage) {
+                        messageContent.innerHTML = `<p class="text-red-500 font-bold">${errorMessage}</p>`;
+                    }
+
+                    // Show the modal
+                    messageModal.classList.remove('hidden');
+                }
+            });
+
+            function closeModal() {
+                let messageModal = document.getElementById('messageModal');
+                messageModal.classList.add('hidden');
+            }
+        </script>
+
 
         <div class="flex flex-row w-full h-[10vh] items-center justify-start">
             <button class=" w-14 p-2 hover:scale-125 transition duration-200" onclick="goBack()">
@@ -1439,11 +1547,12 @@
                     <input class="block w-1/4 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file">
                 </div>
             </div>
-
               <!--general form-->
                 <form action="{{ route('admin.InsertEmployeeData') }}" method="POST" class="space-y-5" onsubmit="showLoadingSpinner()">
                     
-                    <!--choosing a designated department for a employee-->
+                @csrf
+
+                            <!--choosing a designated department for a employee-->
                     <div class="p-5">
                         <label for="department" class="block text-sm font-medium text-gray-600">Designated Department:</label>
                         <select id="department" name="department" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500">
@@ -1452,14 +1561,12 @@
                                 <option value="{{ $department->department_ID }}">{{ $department->department_name }}</option>
                             @endforeach
                         </select>
+                        @error('department')
+                            <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                        @enderror
                     </div>
-                    @csrf
 
-                    @if (session()->has('errors'))
-                        <div class="text-red-500 text-sm mb-4">
-                            {{ session('errors')->first() }}
-                        </div>
-                    @endif
+                  
                         <!--personal information section-->
                     <div class="p-5">
 
@@ -1467,35 +1574,54 @@
                         <h3 class="text-lg font-medium text-gray-800 text-left">-Personal Information-</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                             <div>
-                                <label for="firstName" class="block text-sm font-medium text-gray-600">First Name:</label>
+                                <label for="firstName" class="block text-sm font-medium text-gray-600">First Name:  <span class="text-red-500">*</span></label>
                                 <input type="text" id="w_firstName" name="firstName" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="First name" required>
+                               
                             </div>
                             <div>
-                                <label for="middleName" class="block text-sm font-medium text-gray-600">Middle Name:</label>
+                                <label for="middleName" class="block text-sm font-medium text-gray-600">Middle Name:  <span class="text-red-500">*</span></label>
                                 <input type="text" id="w_middleName" name="middleName" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Middle name" required>
+                               
                             </div>
                             <div>
-                                <label for="lastName" class="block text-sm font-medium text-gray-600">Last Name:</label>
+                                <label for="lastName" class="block text-sm font-medium text-gray-600">Last Name:  <span class="text-red-500">*</span></label>
                                 <input type="text" id="w_lastName" name="lastName" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Last name" required>
+                              
+                            </div>
+
+                            <div>
+                                <label for="suffixes" class="block text-sm font-medium text-gray-600">Suffix:</label>
+                                <select id="w_suffix" name="suffix_input" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500">
+                                    <option value="none">- -</option>
+                                    <option value="junior">JR</option>
+                                    <option value="second">II</option>
+                                    <option value="third">III</option>
+                                    <option value="fourth">IV</option>
+                                    <option value="fifth">V</option>
+                                    <option value="sixth">VI</option>
+                                </select>
                             </div>
                            
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                             <div>
-                                <label for="birthday" class="block text-sm font-medium text-gray-600">Birth date:</label>
+                                <label for="birthday" class="block text-sm font-medium text-gray-600">Birth date:  <span class="text-red-500">*</span></label>
                                 <input type="date" id="w_birthdate" name="birthdate" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Birth date" required>
+                               
                             </div>
                             <div>
-                                <label for="birthplace" class="block text-sm font-medium text-gray-600">Birth place:</label>
+                                <label for="birthplace" class="block text-sm font-medium text-gray-600">Birth place:  <span class="text-red-500">*</span></label>
                                 <input type="text" id="w_birthplace" name="birthplace" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Birth place" required>
+                               
                             </div>
                             <div>
-                                <label for="civilstatus" class="block text-sm font-medium text-gray-600">Civil Status:</label>
+                                <label for="civilstatus" class="block text-sm font-medium text-gray-600">Civil Status:  <span class="text-red-500">*</span></label>
                                 <select id="w_civilstatus" name="civilstatus" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" required>
                                     <option value="" disabled selected>Select your civil status</option>
                                     <option value="Single">Single</option>
                                     <option value="Married">Married</option>
                                 </select>
+                               
                             </div>
                         </div>
                     </div>
@@ -1505,27 +1631,32 @@
                         <h3 class="text-lg font-medium text-gray-800 text-left">-Contact Information-</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                             <div>
-                                <label for="email" class="block text-sm font-medium text-gray-600">Email:</label>
-                                <input type="text" id="w_email" name="Email" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Email" required>
+                                <label for="email" class="block text-sm font-medium text-gray-600">Email:  <span class="text-red-500">*</span></label>
+                                <input type="email" id="w_email" name="Email" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Email" required>
+                              
                             </div>
                             <div>
-                                <label for="contactNo" class="block text-sm font-medium text-gray-600">Contact Number:</label>
+                                <label for="contactNo" class="block text-sm font-medium text-gray-600">Contact Number:  <span class="text-red-500">*</span></label>
                                 <input type="text" id="w_contactNo" name="contactNumber" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Contact Number" required>
+                             
                             </div>
                             <div>
-                                <label for="telephoneNo" class="block text-sm font-medium text-gray-600">Telephone Number:</label>
+                                <label for="telephoneNo" class="block text-sm font-medium text-gray-600">Telephone Number:  <span class="text-red-500">*</span></label>
                                 <input type="text" id="w_telephoneNum" name="telephoneNumber" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Telephone Number" required>
+                              
                             </div>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                             <div>
-                                <label for="permaddress" class="block text-sm font-medium text-gray-600">Permanent Address:</label>
+                                <label for="permaddress" class="block text-sm font-medium text-gray-600">Permanent Address:  <span class="text-red-500">*</span></label>
                                 <input type="text" id="w_Currentaddress" name="PermanentAddress" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Permanent Address" required>
+                               
                             </div>
                             <div>
-                                <label for="currentaddress" class="block text-sm font-medium text-gray-600">Current Address:</label>
+                                <label for="currentaddress" class="block text-sm font-medium text-gray-600">Current Address:  <span class="text-red-500">*</span></label>
                                 <input type="text" id="w_Currentaddress" name="CurrentAddress" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Current Address" required>
+                              
                             </div>
                         </div>
                     </div>
@@ -1538,11 +1669,10 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                                 <div>
                                     <label for="sssid" class="block text-sm font-medium text-gray-600">SSS ID:</label>
-                                    <input type="text" id="w_sss" name="sssId" value="{{ old('sssId') }}" class="w-full mt-2 p-2 border rounded-md @error('sssId') border-red-500 @enderror" placeholder="00-0000000-0" maxlength="12" required>
+                                    <input type="text" id="w_sss" name="sssId" value="{{ old('sssId') }}" class="w-full mt-2 p-2 border rounded-md @error('sssId') border-red-500 @enderror" placeholder="00-0000000-0" maxlength="12" >
+                                    <span class="text-gray-500 text-sm italic">Leave blank if not available.</span>
                                     <p id="sssError" class="text-red-500 text-sm hidden">Continue typing until the designated format are met.  (00-0000000-0).</p>
-                                    @error('sssId')
-                                        <p class="text-red-500 text-sm">{{ $message }}</p>
-                                    @enderror
+                                    
                                 </div>
                                 <div>
                                     <label class="block mb-2 text-sm font-medium text-gray-900 " for="file_input">Upload scanned files <span class="text-sm italic font-normal">*if available</span></label>
@@ -1554,11 +1684,10 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                                 <div>
                                     <label for="philhealthid" class="block text-sm font-medium text-gray-600">PhilHealth ID:</label>
-                                    <input type="text" id="w_philhealth" name="philhealthId" value="{{ old('philhealthId')}}" class="w-full mt-2 p-2 border rounded-md @error('philhealthId') border-gray-300 @enderror " placeholder="00-00000000-0" maxlength="13" required>
+                                    <input type="text" id="w_philhealth" name="philhealthId" value="{{ old('philhealthId')}}" class="w-full mt-2 p-2 border rounded-md @error('philhealthId') border-gray-300 @enderror " placeholder="00-00000000-0" maxlength="13">
+                                    <span class="text-gray-500 text-sm italic">Leave blank if not available.</span>
                                     <p id="philhealthError" class="text-red-500 text-sm hidden">Continue typing until the designated format are met.  (00-00000000-0).</p>
-                                    @error('philhealthId')
-                                        <p class="text-red-500 text-sm">{{ $message }}</p>
-                                    @enderror
+                                   
                                 </div>
                             </div>
 
@@ -1566,11 +1695,10 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                                 <div>
                                     <label for="Pagibig" class="block text-sm font-medium text-gray-600">PAGIBIG:</label>
-                                    <input type="text" id="w_pagibig" name="Pagibig" value="{{ old('Pagibig') }}" class="w-full mt-2 p-2 border rounded-md @error('Pagibig') border-gray-300 @enderror" placeholder="0000-0000-0000" maxlength="14" required>
+                                    <input type="text" id="w_pagibig" name="Pagibig" value="{{ old('Pagibig') }}" class="w-full mt-2 p-2 border rounded-md @error('Pagibig') border-gray-300 @enderror" placeholder="0000-0000-0000" maxlength="14">
+                                    <span class="text-gray-500 text-sm italic">Leave blank if not available.</span>
                                     <p id="pagibigError" class="text-red-500 text-sm hidden">Continue typing until the designated format are met.  (0000-0000-0000).</p>
-                                    @error('Pagibig')
-                                        <p class="text-red-500 text-sm">{{ $message }}</p>
-                                    @enderror
+                                   
                                 </div>
                             </div>
 
@@ -1578,11 +1706,10 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                                 <div>
                                     <label for="TIN" class="block text-sm font-medium text-gray-600">TIN Number:</label>
-                                    <input type="text" id="w_tin" name="TINno" value="{{ old('TINno') }}" class="w-full mt-2 p-2 border rounded-md @error('TINno') border-gray-300 @enderror" placeholder="000-000-000-000" maxlength="15" required>
+                                    <input type="text" id="w_tin" name="TINno" value="{{ old('TINno') }}" class="w-full mt-2 p-2 border rounded-md @error('TINno') border-gray-300 @enderror" placeholder="000-000-000-000" maxlength="15" >
+                                    <span class="text-gray-500 text-sm italic">Leave blank if not available.</span>
                                     <p id="tinError" class="text-red-500 text-sm hidden">Continue typing until the designated format are met.  (000-000-000-000).</p>
-                                    @error('TINno')
-                                        <p class="text-red-500 text-sm">{{ $message }}</p>
-                                    @enderror
+                                   
                                 </div>
                             </div>
                         </div>
@@ -1937,12 +2064,18 @@
                     </button>
                 </div>
                 </form>
+                            
 
+            @if (session('success'))
+                <div class="text-green-600 z-50">{{ session('success') }}</div>
+            @endif
+
+            @if (session('error'))
+                <div class="text-red-500 z-50">{{ session('error') }}</div>
+            @endif
 
             </div>
         </div>
-
-        
     </section>
 
     <!--performance form section-->
@@ -2445,6 +2578,111 @@
         
     </section>
 
+    <!--announcement all list section-->
+    <section id ="announcement-content" class = "section hidden w-full h-screen p-7">
+        
+        <div class="w-full h-[85vh] h-[calc(100vh-100px)] overflow-y-auto p-5 mt-16 bg-white dark:bg-gray-700 rounded-xl">
+        <h1 class="font-bold text-2xl text-black dark:text-white">ANNOUNCEMENTS</h1>
+        
+        <!-- Announcement List Table -->
+        <table class="w-full table-fixed text-left mt-5">
+            <thead>
+                <tr class="bg-gray-100 dark:bg-gray-600 text-white text-left">
+                    <th class="px-4 py-2 font-normal text-sm text-black opacity-60 w-1/2 dark:text-white">Title</th>
+                    <th class="px-4 py-2 font-normal text-sm text-black opacity-60 w-1/4 text-center dark:text-white">Date</th>
+                    <th class="px-4 py-2 font-normal text-sm text-black opacity-60 w-1/4 text-center dark:text-white"></th>
+                </tr>
+            </thead>
+            <tbody id="full-announcement-list">
+                <!-- Announcements will be dynamically inserted here -->
+            </tbody>
+        </table>
+        </div>
+    <!--script for announcement all list section-->
+   <script>
+
+       document.addEventListener('DOMContentLoaded', function () {
+        fetchFullAnnouncements(); // Call this to fetch announcements when the page loads
+    });
+
+    // Fetch announcements from the backend and display them
+    function fetchFullAnnouncements() {
+        fetch('{{ route('admin.getAllAnnouncements') }}') // Make sure this matches your route for fetching announcements
+            .then(response => response.json())
+            .then(data => {
+                const announcements = data.announcements;
+                const announcementList = document.getElementById('full-announcement-list');
+                announcementList.innerHTML = ''; // Clear the existing content
+
+                if (announcements.length > 0) {
+                    announcements.forEach(announcement => {
+                        const employee = announcement.employee;
+                        const employeeName = employee ? `${employee.first_name} ${employee.last_name}`.trim() : 'Unknown'; // Combine first, middle, and last name
+                        const employeeDept = 'HR/Admin Department';
+                        const row = `
+                            <tr class="border-b border-gray-200 hover:bg-gray-500 dark:border-white opacity-70">
+                                <td class="px-4 py-2 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white opacity-100">
+                                    ${announcement.announce_subject}
+                                    <span class="block text-xs italic text-gray-500 dark:text-white opacity-60 font-light">
+                                        By: ${employeeName} - ${employeeDept}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-2 text-sm text-gray-700 text-center dark:text-white">
+                                    ${new Date(announcement.date).toLocaleDateString()}
+                                </td>
+                                <td class="px-4 py-2 text-sm text-gray-700 text-center">
+                                    <button class="text-blue-500 hover:underline dark:text-red-400"  onclick="expandAnnouncement(${announcement.announce_ID})">View Details</button>
+                                </td>
+                            </tr>
+
+                            <!-- Hidden row for expanded details -->
+                            <tr id="announcement-details-${announcement.announce_ID}" class="hidden">
+                                <td colspan="3" class="px-4 py-2">
+                                    <div class="announcement-scroll" style="max-height: 200px; overflow-y: auto;  padding: 8px; border-radius: 8px;">
+                                        <p class="text-sm text-gray-700 dark:text-white pre-wrap">${announcement.announce_body}</p>
+                                    </div>
+                                    <button class="mt-2 text-red-500 hover:underline" onclick="collapseAnnouncement(${announcement.announce_ID})">Close</button>
+                                </td>
+                            </tr>
+                        `;
+                            announcementList.insertAdjacentHTML('beforeend', row);
+                        });
+                    } else {
+                        announcementList.innerHTML = `<tr><td colspan="3" class="text-center py-4 text-gray-500">No announcements available</td></tr>`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching announcements:', error);
+                    document.getElementById('full-announcement-list').innerHTML = `<tr><td colspan="3" class="text-center py-4 text-red-500">Error loading announcements</td></tr>`;
+                });
+        }
+
+        // Expand announcement details
+        function expandAnnouncement(announceId) {
+
+            // First, collapse all other open announcements
+            const allDetails = document.querySelectorAll('[id^="announcement-details-"]');
+            allDetails.forEach(detail => {
+                if (!detail.classList.contains('hidden')) {
+                    detail.classList.add('hidden'); // Hide all currently open details
+                }
+            });
+            const detailsRow = document.getElementById(`announcement-details-${announceId}`);
+            detailsRow.classList.remove('hidden'); // Show the details
+        }
+
+         const announcementBody = detailsRow.querySelector('p');
+        announcementBody.classList.add('pre-wrap'); // Add the pre-wrap class
+
+        // Collapse announcement details
+        function collapseAnnouncement(announceId) {
+            const detailsRow = document.getElementById(`announcement-details-${announceId}`);
+            detailsRow.classList.add('hidden'); // Hide the details
+        }
+
+    </script>
+    </section>
+
     <!--announce modal-->
     <div id="announceModal" class="fixed flex items-center inset-0 bg-white bg-opacity-50 items-center justify-center hidden z-50">
         
@@ -2452,33 +2690,34 @@
         
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-lg font-bold text-black dark:text-white">Create an Announcement</h2>
-                <button id="closeModal" class="text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-gray-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
             </div>
-            
+
+            <form id="announceForm" method="POST" action="{{ route('admin.createAnnouncement')}}"> 
+                @csrf
             <div class="p-4 flex flex-col gap-2">
                <div class="flex flex-col">
                     <h2 class="text-md font-medium dark:text-white">
                         Subject:
                     </h2>
-                    <input type="text" id="subject" class="w-full p-2 h-[5vh] rounded-lg border-2 border-gray-200" placeholder="Subject..." required>
+                   <input type="text" id="subject" name="announce_subject" class="w-full p-2 h-[5vh] rounded-lg border-2 border-gray-200" placeholder="Subject..." required>
                </div>
                <div class="flex flex-col">
                     <h2 class="text-md font-medium dark:text-white">
                         Announcement:
                     </h2>
-                    <textarea id="announcement" class="w-full p-2 h-[10vh] rounded-lg border-2 border-gray-200" placeholder="announcement" required>
+                    <textarea id="announcement" name="announce_body" class="w-full p-2 h-[10vh] rounded-lg border-2 border-gray-200" placeholder="announcement" required></textarea>
                     </textarea>
                </div>
                
             </div>
 
-            <button class="w-[10vh] h-[6vh] rounded-lg shadow-md bg-blue-500 text-lg font-bold text-white text-center hover:scale-110 transition duration-200 ml-auto">
+            <button class="w-[10vh] h-[5vh] rounded-lg shadow-md bg-blue-500 text-lg font-bold text-white text-center hover:scale-110 transition duration-200 ml-auto">
                 Post
             </button>
+            <button id='closeButton' class="w-[10vh] h-[5vh] rounded-lg shadow-md bg-blue-500 text-lg font-bold text-white text-center hover:scale-110 transition duration-200 ml-auto">
+                Close
+            </button>
+            </form>
         </div>
     </div>
 
@@ -2488,11 +2727,7 @@
         <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-semibold dark:text-blac">Evaluation Help </h2>
-                <button id="closeModal" class="text-gray-500 hover:text-gray-700 dark:text-white dark:hover:text-gray-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
+                
             </div>
                 
             <!--rating scale information-->    
@@ -2552,7 +2787,6 @@
                     document.getElementById('loading-spinner').classList.remove('hidden');
                 }
             </script>
-    
     <!--script of announce Modal-->
     <script>
         document.getElementById('announcementButton').addEventListener('click', function() {
@@ -2615,54 +2849,73 @@
             button.addEventListener('click', () => toggleSearchModal(true));
         });
     </script>
-
-    <!--Deparment Section-->
     
-   <!--scripts for sections-->
-    <script>
-        let lastSection = 'dashboard'; // Default starting section
+   
+  <!--scripts for sections-->
 
-        // Function to handle navigation clicks
-        function navigateTo(sectionId, element) {
-            // Hide all sections
-            const sections = document.querySelectorAll('.section');
-            sections.forEach(section => {
-                section.classList.remove('active');
-            });
 
-            // Show the clicked section
-            const activeSection = document.getElementById(sectionId + '-content');
-            if (activeSection) {
-                activeSection.classList.add('active');
-            }
+<script>
+    // Prevent the default form submission (remove this line if it causes issues)
+    // event.preventDefault();
 
-            // Save the current section as the last section before moving
-            if (sectionId !== 'add-employee') {
-                lastSection = sectionId;
-            }
+    // Store the last section visited
+    let lastSection = 'dashboard'; // Default to dashboard on initial load
 
-            // Update the document title based on the clicked element
-            document.title = element.textContent.trim() + ' - INX10';
+    // Function to handle navigation clicks
+    function navigateTo(sectionId, element) {
+        // Hide all sections
+        const sections = document.querySelectorAll('.section');
+        sections.forEach(section => {
+            section.classList.remove('active');
+        });
 
-            // Optional: Update the active class on navigation
-            const navItems = document.querySelectorAll('.sidebar-item');
-            navItems.forEach(item => {
-                item.classList.remove('font-bold');
-            });
+        // Show the clicked section
+        const activeSection = document.getElementById(sectionId + '-content');
+        if (activeSection) {
+            activeSection.classList.add('active');
+        }
+
+        // Save the current section as the last section before moving
+        if (sectionId !== 'add-employee') {
+            lastSection = sectionId;
+        }
+
+        // Update the document title based on the clicked element
+        document.title = element.textContent.trim() + ' - INX10';
+
+        // Optional: Update the active class on navigation
+        const navItems = document.querySelectorAll('.sidebar-item');
+        navItems.forEach(item => {
+            item.classList.remove('font-bold');
+        });
+        if (element) {
             element.classList.add('font-bold');
         }
+    }
 
-        // Function to handle the "Go Back" button in the Add Employee section
-        function goBack() {
-            // Navigate to the last section stored
-            navigateTo(lastSection, document.querySelector(`[data-toggle-section="${lastSection}"]`));
-        }
+    // Function to handle the "Go Back" button in the Add Employee section
+    function goBack() {
+        // Navigate to the last section stored
+        navigateTo(lastSection, document.querySelector(`[data-toggle-section="${lastSection}"]`));
+    }
 
-        // Initial load: Activate the default section (Dashboard)
-        document.addEventListener('DOMContentLoaded', () => {
+    // Initial load: Activate the default section (Dashboard) or check session
+    document.addEventListener('DOMContentLoaded', () => {
+        @if(session('section') === 'add-employee')
+            navigateTo('add-employee', document.querySelector(`[data-toggle-section="add-employee"]`));
+        @else
             navigateTo('dashboard', document.querySelector('.sidebar-item'));
-        });
-    </script>
+        @endif
+    });
+
+    // Event listener for submit button
+    const form = document.querySelector('form'); // Make sure to select your form correctly
+    form.addEventListener('submit', function(event) {
+        lastSection = 'add-employee'; // Update last section before form submission
+        // You can remove event.preventDefault() if it's causing issues
+    });
+</script>
+
 
 </body>
 </html>

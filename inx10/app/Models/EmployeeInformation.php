@@ -14,11 +14,10 @@ class EmployeeInformation extends Model
 
     // If the primary key is not an incrementing integer, specify its type
     public $incrementing = true;
-    protected $keyType = 'bigint';
 
     // Allow mass assignment for these fields
     protected $fillable = [
-        'user_ID', 'first_name', 'middle_name', 'last_name'
+       'user_ID', 'first_name', 'middle_name', 'last_name'
     ];
 
     // Automatically handle created_at and updated_at timestamps

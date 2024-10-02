@@ -3,6 +3,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Carbon\Carbon; // To handle dates
+use App\Models\EmployeeHistory;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\Authenticate;
 use Illuminate\Http\Request;
@@ -12,6 +14,8 @@ use App\Models\EmployeeDepartment;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Session;
+use App\Models\Announcement;
 
 
 
@@ -38,159 +42,209 @@ class EmployeeController extends Controller
  */
         public function create()
         {
-            $departments = EmployeeDepartment::all(); // Static access
+            $departments = EmployeeDepartment::all();
             return view('admin', ['departments' => $departments]);
         }
+
+        public function employee(){
+            return view('employee');
+        }
+        
 
 /**
  * @SuppressWarnings(PHPMD.StaticAccess)
  */
-       
         public function insertEmployeeData(Request $request)
         {
-            // Validation for government IDs (you can expand validation as needed)
-            $messages = [
-                'sssId.unique' => 'SSS ID is already taken.',
-                'philhealthId.unique' => 'PhilHealth ID is already taken.',
-                'Pagibig.unique' => 'Pag-IBIG ID is already taken.',
-                'TINno.unique' => 'TIN number is already taken.',
-            ];
+           
 
-            $validator = Validator::make($request->all(), [
-                'sssId' => 'required|unique:employee_governmentid,sss|max:12',
-                'philhealthId' => 'required|unique:employee_governmentid,philhealth|max:13',
-                'Pagibig' => 'required|unique:employee_governmentid,pagibig|max:14',
-                'TINno' => 'required|unique:employee_governmentid,tin|max:15',
-            ], $messages);
-
-            if ($validator->fails()) {
-                return back()->withErrors($validator)->withInput();
-            }
-
-            // Wrap everything in a transaction to ensure atomicity
-            DB::beginTransaction();
-
-            try {
-                // Insert basic employee data using stored procedure
+          try{
                 $fname = $request->input('firstName');
                 $mname = $request->input('middleName');
                 $lname = $request->input('lastName');
+                $suffixes = $request->input('suffix_input');
 
-                // Call the stored procedure AddEmployeeData
-                $result = DB::select('CALL AddEmployeeData(?, ?, ?)', [$fname, $mname, $lname]);
+                $employeeId = DB::table('employee_information')->insertGetId([
+                    'first_name'=>$fname,
+                    'middle_name'=>$mname,
+                    'last_name' => $lname,
+                    'suffix' => $suffixes,
+                ]);
 
-                if ($result) {
-                    $employeeId = $result[0]->employee_ID;
+              
 
-                    // Insert into employee_otherinfo table
-                    $birthDate = $request->input('birthdate');
-                    $birthPlace = $request->input('birthplace');
-                    $civilStatus = $request->input('civilstatus');
+                $birthDate = $request->input('birthdate');
+                $birthPlace = $request->input('birthplace');
+                $civilStatus = $request->input('civilstatus');
 
-                    DB::table('employee_otherinfo')->insert([
-                        'employee_ID' => $employeeId,
-                        'birth_date' => $birthDate,  // Keep the database column name as snake_case
-                        'birth_place' => $birthPlace,
-                        'civil_status' => $civilStatus,
-                    ]);
+                DB::table('employee_otherinfo')->insert([
+                    'employee_ID' => $employeeId,
+                    'birth_date' => $birthDate,  
+                    'birth_place' => $birthPlace,
+                    'civil_status' => $civilStatus,
+                ]);
 
-                    // Insert into employee_contactinfo table
-                    $email = $request->input('Email');
-                    $conNumber = $request->input('contactNumber');
-                    $telNumber = $request->input('telephoneNumber');
-                    $perAddress = $request->input('PermanentAddress');
-                    $currAddress = $request->input('CurrentAddress');
+                $email = $request->input('Email');
+                $conNumber = $request->input('contactNumber');
+                $telNumber = $request->input('telephoneNumber');
+                $perAddress = $request->input('PermanentAddress');
+                $currAddress = $request->input('CurrentAddress');
 
-                    DB::table('employee_contactinfo')->insert([
-                        'employee_ID' => $employeeId,
-                        'email' => $email,
-                        'contact_no' => $conNumber,
-                        'telephone_no' => $telNumber,
-                        'permanent_address' => $perAddress,
-                        'current_address' => $currAddress,
-                    ]);
+                DB::table('employee_contactinfo')->insert([
+                    'employee_ID' => $employeeId,
+                    'email' => $email,
+                    'contact_no' => $conNumber,
+                    'telephone_no' => $telNumber,
+                    'permanent_address' => $perAddress,
+                    'current_address' => $currAddress,
+                ]);
 
-                    // Insert into employee_governmentid table
-                    $sssid = $request->input('sssId');
-                    $philhealthid = $request->input('philhealthId');
-                    $pagibigid = $request->input('Pagibig');
-                    $tinid = $request->input('TINno');
+                // Optional government IDs
+                $sssid = $request->input('sssId');
+                $philhealthid = $request->input('philhealthId');
+                $pagibigid = $request->input('Pagibig');
+                $tinid = $request->input('TINno');
 
+                // Validate only if inputs are provided
+                $validator = Validator::make($request->all(), [
+                    'sssId' => 'nullable|unique:employee_governmentid,sss|max:12',
+                    'philhealthId' => 'nullable|unique:employee_governmentid,philhealth|max:13',
+                    'Pagibig' => 'nullable|unique:employee_governmentid,pagibig|max:14',
+                    'TINno' => 'nullable|unique:employee_governmentid,tin|max:15',
+                ]);
+
+                if ($validator->fails()) {
+                    return back()->withErrors($validator)->withInput();
+                }
+
+                // Insert only if values are provided
+                if ($sssid) {
                     DB::table('employee_governmentid')->insert([
                         'employee_ID' => $employeeId,
                         'sss' => $sssid,
+                    ]);
+                }
+                if ($philhealthid) {
+                    DB::table('employee_governmentid')->insert([
+                        'employee_ID' => $employeeId,
                         'philhealth' => $philhealthid,
+                    ]);
+                }
+                if ($pagibigid) {
+                    DB::table('employee_governmentid')->insert([
+                        'employee_ID' => $employeeId,
                         'pagibig' => $pagibigid,
+                    ]);
+                }
+                if ($tinid) {
+                    DB::table('employee_governmentid')->insert([
+                        'employee_ID' => $employeeId,
                         'tin' => $tinid,
                     ]);
+                }
 
-                    // Insert work history
-                    $companies = $request->input('company');
-                    $startdates = $request->input('start_dates');
-                    $enddates = $request->input('end_dates');
-                    $jobtitles = $request->input('remarks');
+                        // Insert work history
+                $companies = $request->input('company');
+                $startdates = $request->input('start_dates');
+                $enddates = $request->input('end_dates');
+                $jobtitles = $request->input('remarks');
 
-                    $maxEntries = max(count($companies), count($enddates));
+                $maxEntries = max(count($companies), count($enddates));
 
-                    for ($i = 0; $i < $maxEntries; $i++) {
-                        $companyName = isset($companies[$i]) ? $companies[$i] : null;
-                        $startdatecomp = isset($startdates[$i]) ? $startdates[$i] : null;
-                        $enddatecomp = isset($enddates[$i]) ? $enddates[$i] : null;
-                        $jobtitlesremarks = isset($jobtitles[$i]) ? $jobtitles[$i] : null;
-
-                        if ($companyName === null) {
-                            continue;
-                        }
-
+                for ($i = 0; $i < $maxEntries; $i++) {
+                    $companyName = isset($companies[$i]) ? $companies[$i] : null;
+                    if ($companyName) { // Only insert if company name is present
                         DB::table('employee_workhistory')->insert([
                             'employee_ID' => $employeeId,
                             'company' => $companyName,
-                            'start_date' => $startdatecomp,
-                            'end_date' => $enddatecomp,
-                            'remarks' => $jobtitlesremarks,
+                            'start_date' => isset($startdates[$i]) ? $startdates[$i] : null,
+                            'end_date' => isset($enddates[$i]) ? $enddates[$i] : null,
+                            'remarks' => isset($jobtitles[$i]) ? $jobtitles[$i] : null,
                         ]);
                     }
+                }
 
-                    // Insert education history
-                    $highSchool = $request->input('high_school_names');
-                    $highSchoolend = $request->input('high_school_end_dates');
-                    $college = $request->input('college_names');
-                    $collegeend = $request->input('college_end_dates');
+                // Insert educational background
+                $highSchool = $request->input('high_school_names');
+                $highSchoolend = $request->input('high_school_end_dates');
+                $college = $request->input('college_names');
+                $collegeend = $request->input('college_end_dates');
 
-                    $maxEntries = max(count($highSchool), count($college), count($highSchoolend), count($collegeend));
+                $maxEntries = max(count($highSchool), count($highSchoolend), count($college), count($collegeend));
 
-                    for ($i = 0; $i < $maxEntries; $i++) {
-                        $highSchoolName = isset($highSchool[$i]) ? $highSchool[$i] : null;
-                        $collegeName = isset($college[$i]) ? $college[$i] : null;
-                        $highSchoolEndDate = isset($highSchoolend[$i]) ? $highSchoolend[$i] : null;
-                        $collegeEndDate = isset($collegeend[$i]) ? $collegeend[$i] : null;
+                for ($i = 0; $i < $maxEntries; $i++) {
+                    $highSchoolName = isset($highSchool[$i]) ? $highSchool[$i] : null;
+                    $collegeName = isset($college[$i]) ? $college[$i] : null;
 
-                        if ($highSchoolName === null && $collegeName === null) {
-                            continue;
-                        }
-
+                    // Only insert if either high school or college name is present
+                    if ($highSchoolName || $collegeName) {
                         DB::table('employee_education')->insert([
                             'employee_ID' => $employeeId,
                             'highschool' => $highSchoolName,
                             'college' => $collegeName,
-                            'remarks' => 'High School End Date: ' . $highSchoolEndDate . ' | College End Date: ' . $collegeEndDate,
+                            'remarks' => 'High School End Date: ' . (isset($highSchoolend[$i]) ? $highSchoolend[$i] : null) . ' | College End Date: ' . (isset($collegeend[$i]) ? $collegeend[$i] : null),
                         ]);
                     }
-
-                    // Commit the transaction after successful inserts
-                    DB::commit();
-
-                    return redirect()->back()->with('success', 'Employee data inserted successfully.');
                 }
 
-            } catch (\Exception $e) {
-                // Rollback the transaction if any exception occurs
-                DB::rollback();
-                Log::error('Error inserting employee data: ' . $e->getMessage());
+                EmployeeHistory::create([
+                    'employee_ID' => $employeeId, // Assuming employee_ID is auto-incremented
+                    'department_ID' => $request->input('department'),
+                    'start_date' => Carbon::now(), // Set the start date to the current date
+                    'status' => true, // Assuming 'true' means the employee is active
+                ]);
 
-                return redirect()->back()->withErrors('Error occurred during employee data insertion. Please try again.')->withInput();
+               
+        
+                // Redirect back to the same route with the fragment
+                return redirect()->back()->with([
+                    'success' => 'Employee data inserted successfully!',
+                    'section' => 'add-employee' // Pass the section identifier
+                ]);
+                
+            
+            
+            }catch (\Exception $e) {
+                return redirect()->back()->with([
+                    'error' => 'An error occurred while inserting employee data.',
+                    'section' => 'add-employee' // Pass the section identifier even in case of error
+                    
+                ]);
             }
+            
+            }
+/**
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ */
+            public function getDepartmentEmployeeCounts()
+            {
+                try {
+                    // Count employees per department from the employee_history table
+                    $departmentEmployeeCounts = EmployeeHistory::select('department_ID', DB::raw('count(*) as total'))
+                        ->groupBy('department_ID')
+                        ->pluck('total', 'department_ID')
+                        ->toArray();
+
+                    // Return the counts as JSON
+                    return response()->json(['departmentEmployeeCounts' => $departmentEmployeeCounts]);
+                } catch (\Exception $e) {
+                    Log::error('Error fetching department employee counts: ' . $e->getMessage());
+                    return response()->json(['departmentEmployeeCounts' => []], 500); // Return an empty array on error
+                }
+            }
+
+            public function showProfile()
+                {
+                    $user = auth()->user(); 
+
+    // Check if a user is authenticated
+                if (!$user) {
+                    return redirect()->route('login'); // Redirect to login if not authenticated
+                }
+
+                // Pass the user to the view
+                return view('admin', compact('user'));  // Pass user to the view
+                }
+
         }
-
-}
-
+    
