@@ -46,7 +46,9 @@
             <button class="hover:scale-110 transition duration-200">
                 <img src="{{ URL('images/defaultprofpic.png') }}" alt="" class="w-9 h-9">
             </button>
-            <h2 class="text-lg dark:text-white"></h2> <!-- Display user name -->
+            <h2 class="text-lg dark:text-white">
+                 {{ Auth::user()->employeeInfo->first_name }} {{ Auth::user()->employeeInfo->last_name }}
+            </h2> <!-- Display user name -->
             <div x-data="{ open: false }" class="relative">
                 <button @click.stop="open = !open" class="hover:scale-110 transition duration-200">
                     <img src="{{ URL('images/dropdownprofile.png') }}" 
@@ -227,7 +229,7 @@
             </div>
            
     <!--whole section flex-->
-            <div class="flex flex-row w-full h-auto gap-3.5">
+                <div class="flex flex-row w-full h-auto gap-3.5">
     <!--left panel content-->
                 <div class="w-4/5 h-full">
     <!--buttons (add,update,search)-->
@@ -305,35 +307,35 @@
                     <div class="flex flex-col w-full md:h-[40vh] bg-white dark:bg-gray-700 p-6 gap-3 justify-start shadow-lg rounded-2xl mb-3">
                         <div class="w-full h-auto flex items-center justify-between ">
                                 <h1 class="text-lg font-bold font-sans dark:text-white">DEPARTMENTS:</h1>
-                                <button class="ml-auto hover:scale-125 transition-all duration-300">
+                                <button class="ml-auto hover:scale-125 transition-all duration-300"  onclick="navigateTo('department_page', this)" data-toggle-section="department_page-content">
                                     <img src="{{URL('images/rightmore.png')}}" alt="showmore-point" data-light-src="{{URL('images/rightmore.png')}}" data-dark-src="{{URL('images/rightmore_dark.png')}}" class="h-7 w-7">
                                 </button>
                         </div>
     <!--department_inside-->
                         <div class="flex flex-row w-full h-auto gap-4">
 
-                            <button class="flex flex-col w-full md:h-[30vh] bg-[#ededed] dark:bg-gray-600 p-4 items-center justify-center rounded-2xl shadow-lg hover:bg-gray-100 dark:hover:bg-gray-500 hover:scale-105 transition-all duration-300">
+                            <button class="department-btn flex flex-col w-full md:h-[30vh] bg-[#ededed] dark:bg-gray-600 p-4 items-center justify-center rounded-2xl shadow-lg hover:bg-gray-100 dark:hover:bg-gray-500 hover:scale-105 transition-all duration-300" data-department-id="1">
                                 <img src="{{URL('images/admin.png')}}" alt="admin_department" class="w-[10vh]">
                                 <h1 class="text-lg font-bold dark:text-white">ADMIN</h1>
                                 <p class="text-sm text-gray-400 dark:text-white">Total Employees:</p>
                                <h1 id="admin-count" class="text-4xl font-bold dark:text-white">Loading...</h1>
                             </button>
 
-                            <button class="flex flex-col w-full md:h-[30vh] bg-[#ededed] dark:bg-gray-600 p-4 items-center justify-center rounded-2xl shadow-lg hover:bg-gray-100 dark:hover:bg-gray-500 hover:scale-105 transition-all duration-300">
+                            <button class="department-btn flex flex-col w-full md:h-[30vh] bg-[#ededed] dark:bg-gray-600 p-4 items-center justify-center rounded-2xl shadow-lg hover:bg-gray-100 dark:hover:bg-gray-500 hover:scale-105 transition-all duration-300" data-department-id="2">
                                 <img src="{{URL('images/msit.png')}}" alt="admin_department" class="w-[10vh]">
                                 <h1 class="text-lg font-bold dark:text-white">MS-IT</h1>
                                 <p class="text-sm text-gray-400 dark:text-white">Total Employees:</p>
                                <h1 id="msit-count" class="text-4xl font-bold dark:text-white">Loading...</h1>
                             </button>
                     
-                            <button class="flex flex-col w-full md:h-[30vh] bg-[#ededed] dark:bg-gray-600 p-4 items-center justify-center rounded-2xl shadow-lg hover:bg-gray-100 dark:hover:bg-gray-500 hover:scale-105 transition-all duration-300">
+                            <button class="department-btn flex flex-col w-full md:h-[30vh] bg-[#ededed] dark:bg-gray-600 p-4 items-center justify-center rounded-2xl shadow-lg hover:bg-gray-100 dark:hover:bg-gray-500 hover:scale-105 transition-all duration-300" data-department-id="11">
                                 <img src="{{URL('images/rollermill.png')}}" alt="admin_department" class="w-[10vh]">
                                 <h1 class="text-lg font-bold dark:text-white">ROLLER-MILL</h1>
                                 <p class="text-sm text-gray-400 dark:text-white">Total Employees:</p>
                                 <h1 id="rollermill-count" class="text-4xl font-bold dark:text-white">Loading...</h1>
                             </button>
                       
-                            <button class="flex flex-col w-full md:h-[30vh] bg-[#ededed] dark:bg-gray-600 p-4 items-center justify-center rounded-2xl shadow-lg hover:bg-gray-100 dark:hover:bg-gray-500 hover:scale-105 transition-all duration-300">
+                            <button class="department-btn flex flex-col w-full md:h-[30vh] bg-[#ededed] dark:bg-gray-600 p-4 items-center justify-center rounded-2xl shadow-lg hover:bg-gray-100 dark:hover:bg-gray-500 hover:scale-105 transition-all duration-300" data-department-id="8">
                                 <img src="{{URL('images/technical.png')}}" alt="admin_department" class="w-[10vh]">
                                 <h1 class="text-lg font-bold dark:text-white">TECHNICAL</h1>
                                 <p class="text-sm text-gray-400 dark:text-white">Total Employees:</p>
@@ -667,49 +669,72 @@
 
                 </div>
 
-    <!--birthday-->
-                   <div class="w-full md:h-[35vh] bg-white dark:bg-gray-700 p-4 rounded-xl shadow-xl flex flex-col justify-center items-center gap-1">
+ 
+                    <!--birthday-->
+                    <div class="w-full md:h-[35vh] bg-white dark:bg-gray-700 p-4 rounded-xl shadow-xl flex flex-col justify-center items-center gap-1">
                         <div class="w-full h-auto flex flex-row items-center justify-center relative mb-3">
                             <h1 class="text-2xl font-bold font-sans mx-auto flex-1 text-center dark:text-white">
                                 BIRTHDAYS
                             </h1>
                         </div>
 
-                        <div class="w-full h-auto flex flex-row justify-center items-center gap-2">
-                            <img src="{{URL('images/bday_default.png')}}" alt="bday profile" class="h-20 w-20">
-
-                            <div class="flex flex-col items-start">
-                                <h1 class="text-2xl font-bold dark:text-white">Martin Calpo</h1>
-                                <p class="text-xs font-normal italic dark:text-white">Technical Department</p>
-                            </div>
+                        <!-- Today's Birthdays Section -->
+                        <div class="w-full h-auto flex flex-row justify-center items-center gap-2" id="today-birthdays">
+                            <!-- Content will be dynamically inserted here by JavaScript -->
                         </div>
-                        <!--upcoming birthdays-->
 
-                        <h1 class="text-sm font-normal italic opacity-40 dark:text-white ">Upcoming Birthdays</h1>
+                        <!-- Upcoming Birthdays Section -->
+                        <h1 class="text-sm font-normal italic opacity-40 dark:text-white">Upcoming Birthdays</h1>
                         <div class="inline-block h-0.5 w-auto self-stretch bg-gray-600 dark:bg-gray-300 opacity-30"></div>
 
-                        <div class="w-full h-auto ">
-                                <table class="w-full text-center">
-                                    <tbody>
-                                        <tr class="border-b border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 gap-4">
-                                            <td class="px-4 py-2 text-sm text-gray-700 font-bold dark:text-white">Ryan Mark Luis</td>
-                                            <td class="px-4 py-2 text-sm text-gray-700 dark:text-white">January 2025</td>
-                                            <td class="px-4 py-2 text-sm text-gray-700 italic dark:text-white">MS-IT</td>
-                                        </tr>
-
-                                        <tr class="border-b border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 gap-4">
-                                            <td class="px-4 py-2 text-sm text-gray-700 font-bold dark:text-white">Ryan Mark Luis</td>
-                                            <td class="px-4 py-2 text-sm text-gray-700 dark:text-white">January 2025</td>
-                                            <td class="px-4 py-2 text-sm text-gray-700 italic dark:text-white">MS-IT</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                        <div class="w-full h-auto">
+                            <table class="w-full text-center">
+                                <tbody id="upcoming-birthdays">
+                                    <!-- Content will be dynamically inserted here by JavaScript -->
+                                </tbody>
+                            </table>
                         </div>
+                    </div>
 
-                   </div>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            fetchBirthdays();
+                        });
 
-                </div>
+                        function fetchBirthdays() {
+                            fetch('/admin/fetch-birthdays')
+                                .then(response => response.json())
+                                .then(data => {
+                                    updateBirthdays(data.birthdaysThisMonth);
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching birthdays:', error);
+                                });
+                        }
 
+                        function updateBirthdays(birthdays) {
+                            const todaySection = document.getElementById('today-birthdays');
+                            todaySection.innerHTML = ''; // Clear previous content
+
+                            if (birthdays.length === 0) {
+                                todaySection.innerHTML = '<h1 class="text-2xl font-bold dark:text-white">No birthdays this month</h1>';
+                            } else {
+                                birthdays.forEach(birthday => {
+                                    todaySection.innerHTML += `
+                                        <div class="w-full h-auto flex flex-row justify-center items-center gap-2">
+                                            <img src="{{ URL('images/bday_default.png') }}" alt="bday profile" class="h-20 w-20">
+                                            <div class="flex flex-col items-start">
+                                                <h1 class="text-2xl font-bold dark:text-white">
+                                                    ${birthday.employee.first_name} ${birthday.employee.middle_name || ''} ${birthday.employee.last_name}
+                                                </h1>
+                                                <p class="text-xs font-normal italic dark:text-white">Department Name</p>
+                                            </div>
+                                        </div>
+                                    `;
+                                });
+                            }
+                        }
+                </script>
             </div>
         
     </section>
@@ -1106,7 +1131,7 @@
                             <img src="{{URL('images/update.png')}}" alt="" class="w-7 w-7">
                             <h2 class="text-medium font-normal dark:text-white">Update Employee</h2>
                         </button>
-                        <button class="w-full h-[7vh] bg-white dark:bg-gray-700 rounded-2xl shadow-xl flex flex-row justify-center items-center hover:translate-y-1.5 transition duration-200 space-x-3">
+                        <button class="w-full h-[7vh] bg-white dark:bg-gray-700 rounded-2xl shadow-xl flex flex-row justify-center items-center hover:translate-y-1.5 transition duration-200 space-x-3" onclick="navigateTo('department_page', this)" data-toggle-section="department_page-content">
                             <img src="{{URL('images/department.png')}}" alt="" class="w-7 w-7">
                             <h2 class="text-medium font-normal dark:text-white">Departments</h2>
                         </button>
@@ -1429,7 +1454,7 @@
                 </button>
             </div>
             <!--employee leave requests overview-->
-            <div class="w-full h-[76vh] flex flex-col p-5 gap-8 bg-white dark:bg-gray-700 rounded-2xl shadow-2xl">
+            <div class="w-full h-[calc(85vh-100px)] overflow-y-auto flex flex-col p-5 gap-8 bg-white dark:bg-gray-700 rounded-2xl shadow-2xl">
                 <!--buttons-->
                 <div class="w-full flex flex-row items-center">
                     <h1 class="w-full text-2xl font-bold dark:text-white">Leave Requests</h1>
@@ -1454,32 +1479,102 @@
                         <th class="text-medium py-3 font-medium dark:text-gray-200">Appraisal of Supervisor</th>
                         <th class=""></th>
                     </thead>
-                    <tbody>
-                        <tr class="border-b">
-                            <td class="text-sm py-3 font-normal text-center">
-                                <a href="" class="no-underline dark:text-white">Ryan Mark Luis</a>
-                            </td>
-                            <td class="text-sm py-3 font-normal text-center">
-                                <span class="w-full py-1 px-2 text-white font-semibold bg-blue-600 rounded-lg shadow-lg">
-                                    Vacation
-                                </span>
-                            </td>
-                            <td class="text-sm py-3 font-normal text-center dark:text-white">MS-IT</td>
-                            <td class="text-sm py-3 font-normal text-center dark:text-white">08-16-2024</td>
-                            <td class="text-sm py-3 font-normal text-center dark:text-white">08-24-2024</td>
-                            <td class="text-sm py-3 font-normal text-center ">
-                                <span class="w-full py-1 px-2 text-white font-semibold bg-green-600 rounded-lg shadow-lg">
-                                    Approved
-                                </span>
-                            </td>
-                            <td class="text-sm py-3 font-bold">
-                                <a href="" class="underline hover:text-red-600 ransition duration-300 dark:text-white">View details...</a>
-                            </td>
-                        </tr>
+                    <tbody id="leave-requests-tbody">
+                    
                     </tbody>
                 </table>
             </div>
+            
         </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                fetchLeaveRequests(); // Call the function to fetch leave requests
+
+                function fetchLeaveRequests() {
+                    fetch('/leave-requests')
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                            const tbody = document.getElementById('leave-requests-tbody');
+                            tbody.innerHTML = ''; // Clear existing content
+
+                            data.forEach(request => {
+                                const row = document.createElement('tr');
+                                row.classList.add('border-b', 'hover:bg-gray-200','cursor-pointer');
+                                row.addEventListener('click', () => {
+                                    openModal(request);
+                                });
+                                row.innerHTML = `
+                                    <td class="text-sm py-3 font-normal text-center">
+                                        <a href="#" class="no-underline dark:text-white">${request.first_name} ${request.last_name}</a>
+                                    </td>
+                                    <td class="text-sm py-3 font-normal text-center">
+                                        <span class="w-full py-1 px-2 text-white font-semibold bg-blue-600 rounded-lg shadow-lg">
+                                            ${request.leave_type === 0 ? request.leave_type_other : (request.leaveType ? request.leaveType : 'N/A')}
+                                        </span>
+                                    </td>
+                                    <td class="text-sm py-3 font-normal text-center dark:text-white">${request.department_name}</td>
+                                    <td class="text-sm py-3 font-normal text-center dark:text-white">${request.leave_from}</td>
+                                    <td class="text-sm py-3 font-normal text-center dark:text-white">${request.leave_to}</td>
+                                    <td class="text-sm py-3 font-normal text-center">
+                                        <span class="w-full py-1 px-2 text-white font-semibold 
+                                            ${request.manager_approval === 1 ? 'bg-green-600' : 
+                                            request.manager_approval === 0 ? 'bg-red-600' : 
+                                            'bg-yellow-500'} rounded-lg shadow-lg">
+                                            ${request.manager_approval === 1 ? 'Approved' : 
+                                            request.manager_approval === 0 ? 'Rejected' : 
+                                            'Pending'}
+                                        </span>
+                                    </td>
+                                `;
+
+                                // Add a click event to the row
+                                row.addEventListener('click', () => {
+                                    openModal(request);
+                                });
+
+                                tbody.appendChild(row);
+                            });
+                        })
+                        .catch(error => console.error('Error fetching leave requests:', error));
+                }
+
+                function openModal(request) {
+                    document.getElementById('leaveID').innerText =request.leave_ID;
+                    document.getElementById('employeeName').innerText = `${request.first_name} ${request.last_name}`;
+                    document.getElementById('departmentName').innerText = request.department_name;
+                    document.getElementById('requestedDate').innerText = request.date_applied; 
+                    document.getElementById('startDate').innerText = request.leave_from;
+                    document.getElementById('endDate').innerText = request.leave_to;
+                   document.getElementById('leaveType').innerText = request.leaveType ? request.leaveType : (request.leave_type_other || 'N/A');
+
+
+                    // Set appraisal text and class based on approval status
+                    const appraisalText = request.manager_approval === 1 ? 'Approved' :
+                                        request.manager_approval === 0 ? 'Rejected' : 'Pending';
+                    const appraisalClass = request.manager_approval === 1 ? 'text-green-500' :
+                                        request.manager_approval === 0 ? 'text-red-600' : 'text-yellow-700';
+
+                    const managerAppraisalElement = document.getElementById('managerAppraisal');
+                    managerAppraisalElement.innerText = appraisalText;
+                    managerAppraisalElement.className = `flex justify-center p-2 items-center ${appraisalClass} rounded-lg font-bold text-md text-white`;
+
+                    
+
+                     // Display the reason for leave
+                    document.getElementById('leaveReason').innerText = request.reason;
+
+                    // Show the modal
+                    document.getElementById('displayRequestForHr').classList.remove('hidden');
+                }
+
+                // Close modal functionality
+                document.getElementById('close-btn').addEventListener('click', () => {
+                    document.getElementById('displayRequestForHr').classList.add('hidden');
+                });
+            });
+        </script>
     </section>
 
     <!--SETTINGS contents-->
@@ -1488,6 +1583,55 @@
         
       
       
+    </section>
+
+    <!--Leave request full details modal approve and reject request-->
+    <section id="displayRequestForHr" class="fixed flex items-center inset-0 bg-white bg-opacity-80 items-center justify-center hidden z-50">
+        <div class="flex flex-col gap-3 bg-gray-200 dark:dark-gray-700 p-6 rounded-lg shadow-lg max-w-md w-full justify-center">
+            <div class="flex flex-col p-2 gap-3">
+
+                <div class="flex flex-row items-center gap-3">
+                    <h1 class="text-3xl font-bold text-black dark:text-white" id="leaveID"></h1> <!-- Leave ID will be displayed here -->
+                    <div class = "flex flex-col items-start">
+                        <h1 id="employeeName" class="text-2xl font-bold text-black dark:text-white">Employee Name</h1>
+                        <h2 id="departmentName" class="text-md font-normal text-black dark:text-white opacitiy-60"><!--insert department name here--></h2>
+                    </div>
+                </div>
+
+                <div class="flex flex-row items-center gap-4">
+                    <p class="text-md font-bold text-black dark:text-white">Date Requested: </p>
+                    <span id="requestedDate" class="text-black text-md dark:text-white" id="requestedDate"></span>
+                </div>
+                <div class="flex flex-row items-center gap-4">
+                    <p class="text-md font-bold text-black dark:text-white">Start Date: </p>
+                    <span id="startDate" class="text-black text-md dark:text-white" id="startDate"></span>
+                </div>
+                <div class="flex flex-row items-center gap-4">
+                    <p class="text-md font-bold text-black dark:text-white">End Date: </p>
+                    <span id="endDate" class="text-black text-md dark:text-white" id="endDate"></span>
+                </div>
+                <div class="flex flex-row items-center gap-4">
+                    <p class="text-md font-bold text-black dark:text-white">Leave Type: </p>
+                    <span id="leaveType" class="text-black text-md dark:text-white" id="leaveType"></span>
+                </div class="flex flex-col items-start gap-2">
+                    <p class="text-md font-bold text-black dark:text-white">Reason: </p>
+                    <span id="leaveReason" class="text-black text-md dark:text-white" id="leaveReason"></span>
+                </div>
+
+                <div class="flex flex-row items-center gap-3">
+                    <p class="text-md font-bold text-black dark:text-white">Appraisal of Supervisor status: </p>
+                    <span id="managerAppraisal"class="flex justify-center p-3 items-center bg-green-600 rounded-lg shadow-lg font-bold text-sm "><!--insert the manager_approval value in here--></span>
+                </div>
+                
+
+                <!-- Modal Buttons -->
+                <div class="flex flex-row align-center items-center gap-3 justify-end">
+                    <button id="approve-btn" class="w-[10vh] h-[5vh] rounded-lg bg-green-600 text-center font-semibold shadow-lg text-white hover:bg-green-500 hover:scale-105 transition duration-200">Approve</button>
+                    <button id="reject-btn" class="w-[10vh] h-[5vh] rounded-lg bg-red-600 text-center font-semibold shadow-lg text-white hover:bg-red-500 hover:scale-105 transition duration-200">Reject</button>
+                    <button id="close-btn" class="w-[10vh] h-[5vh] rounded-lg text-center font-semibold text-black hover:scale-105 transition duration-200" onclick="closeModal()">Close</button>
+                </div>
+            </div>
+        </div>
     </section>
 
     <!--add employee section-->
@@ -1535,547 +1679,571 @@
             </button>
         </div>
         
-    <!--FORM 201-->
-        <div class="w-full bg-white dark:bg-gray-300 md:h-[85vh] h-[calc(100vh-100px)] rounded-lg overflow-y-auto p-4 shadow-2xl">
-            <div class="bg-white dark:bg-gray-200 shadow-md rounded-lg overflow-hidden p-7 space-y-1">
-                <h1 class="text-4xl sm:text-2xl font-bold text-center">Form 201</h1>
-                <p class="text-lg sm:text-sm italic text-center">Fill out the form below</p>
-
-                        <!--upload picture-->
-                <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-900 " for="file_input">Upload image</label>
-                    <input class="block w-1/4 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file">
-                </div>
-            </div>
-              <!--general form-->
-                <form action="{{ route('admin.InsertEmployeeData') }}" method="POST" class="space-y-5" onsubmit="showLoadingSpinner()">
-                    
-                @csrf
-
-                            <!--choosing a designated department for a employee-->
-                    <div class="p-5">
-                        <label for="department" class="block text-sm font-medium text-gray-600">Designated Department:</label>
-                        <select id="department" name="department" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500">
-                            <option value="" disabled selected>Select a department</option>
-                            @foreach ($departments as $department)
-                                <option value="{{ $department->department_ID }}">{{ $department->department_name }}</option>
-                            @endforeach
-                        </select>
-                        @error('department')
-                            <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                  
-                        <!--personal information section-->
-                    <div class="p-5">
-
-                    
-                        <h3 class="text-lg font-medium text-gray-800 text-left">-Personal Information-</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                            <div>
-                                <label for="firstName" class="block text-sm font-medium text-gray-600">First Name:  <span class="text-red-500">*</span></label>
-                                <input type="text" id="w_firstName" name="firstName" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="First name" required>
-                               
-                            </div>
-                            <div>
-                                <label for="middleName" class="block text-sm font-medium text-gray-600">Middle Name:  <span class="text-red-500">*</span></label>
-                                <input type="text" id="w_middleName" name="middleName" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Middle name" required>
-                               
-                            </div>
-                            <div>
-                                <label for="lastName" class="block text-sm font-medium text-gray-600">Last Name:  <span class="text-red-500">*</span></label>
-                                <input type="text" id="w_lastName" name="lastName" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Last name" required>
-                              
-                            </div>
-
-                            <div>
-                                <label for="suffixes" class="block text-sm font-medium text-gray-600">Suffix:</label>
-                                <select id="w_suffix" name="suffix_input" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500">
-                                    <option value="none">- -</option>
-                                    <option value="junior">JR</option>
-                                    <option value="second">II</option>
-                                    <option value="third">III</option>
-                                    <option value="fourth">IV</option>
-                                    <option value="fifth">V</option>
-                                    <option value="sixth">VI</option>
-                                </select>
-                            </div>
-                           
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                            <div>
-                                <label for="birthday" class="block text-sm font-medium text-gray-600">Birth date:  <span class="text-red-500">*</span></label>
-                                <input type="date" id="w_birthdate" name="birthdate" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Birth date" required>
-                               
-                            </div>
-                            <div>
-                                <label for="birthplace" class="block text-sm font-medium text-gray-600">Birth place:  <span class="text-red-500">*</span></label>
-                                <input type="text" id="w_birthplace" name="birthplace" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Birth place" required>
-                               
-                            </div>
-                            <div>
-                                <label for="civilstatus" class="block text-sm font-medium text-gray-600">Civil Status:  <span class="text-red-500">*</span></label>
-                                <select id="w_civilstatus" name="civilstatus" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" required>
-                                    <option value="" disabled selected>Select your civil status</option>
-                                    <option value="Single">Single</option>
-                                    <option value="Married">Married</option>
-                                </select>
-                               
-                            </div>
-                        </div>
-                    </div>
-
-                        <!--Contact information section-->
-                    <div class="p-5">
-                        <h3 class="text-lg font-medium text-gray-800 text-left">-Contact Information-</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                            <div>
-                                <label for="email" class="block text-sm font-medium text-gray-600">Email:  <span class="text-red-500">*</span></label>
-                                <input type="email" id="w_email" name="Email" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Email" required>
-                              
-                            </div>
-                            <div>
-                                <label for="contactNo" class="block text-sm font-medium text-gray-600">Contact Number:  <span class="text-red-500">*</span></label>
-                                <input type="text" id="w_contactNo" name="contactNumber" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Contact Number" required>
-                             
-                            </div>
-                            <div>
-                                <label for="telephoneNo" class="block text-sm font-medium text-gray-600">Telephone Number:  <span class="text-red-500">*</span></label>
-                                <input type="text" id="w_telephoneNum" name="telephoneNumber" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Telephone Number" required>
-                              
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                            <div>
-                                <label for="permaddress" class="block text-sm font-medium text-gray-600">Permanent Address:  <span class="text-red-500">*</span></label>
-                                <input type="text" id="w_Currentaddress" name="PermanentAddress" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Permanent Address" required>
-                               
-                            </div>
-                            <div>
-                                <label for="currentaddress" class="block text-sm font-medium text-gray-600">Current Address:  <span class="text-red-500">*</span></label>
-                                <input type="text" id="w_Currentaddress" name="CurrentAddress" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Current Address" required>
-                              
-                            </div>
-                        </div>
-                    </div>
-
-                        <!--Governement information-->
-                        <div class="p-5">
-                            <h3 class="text-lg font-medium text-gray-800 text-left">-Government Identification-</h3>
+            <!--FORM 201-->
+                <div class="w-full bg-white dark:bg-gray-300 md:h-[85vh] h-[calc(100vh-100px)] rounded-lg overflow-y-auto p-4 shadow-2xl">
+                    <div class="bg-white dark:bg-gray-200 shadow-md rounded-lg overflow-hidden p-7 space-y-1">
+                        <h1 class="text-4xl sm:text-2xl font-bold text-center">Form 201</h1>
+                        <p class="text-lg sm:text-sm italic text-center">Fill out the form below</p>
                             
-                            <!-- SSS ID -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                                <div>
-                                    <label for="sssid" class="block text-sm font-medium text-gray-600">SSS ID:</label>
-                                    <input type="text" id="w_sss" name="sssId" value="{{ old('sssId') }}" class="w-full mt-2 p-2 border rounded-md @error('sssId') border-red-500 @enderror" placeholder="00-0000000-0" maxlength="12" >
-                                    <span class="text-gray-500 text-sm italic">Leave blank if not available.</span>
-                                    <p id="sssError" class="text-red-500 text-sm hidden">Continue typing until the designated format are met.  (00-0000000-0).</p>
-                                    
-                                </div>
-                                <div>
-                                    <label class="block mb-2 text-sm font-medium text-gray-900 " for="file_input">Upload scanned files <span class="text-sm italic font-normal">*if available</span></label>
-                                    <input class="block w-1/2 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file">
-                                </div>
-                            </div>
-
-                            <!-- PhilHealth ID -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                                <div>
-                                    <label for="philhealthid" class="block text-sm font-medium text-gray-600">PhilHealth ID:</label>
-                                    <input type="text" id="w_philhealth" name="philhealthId" value="{{ old('philhealthId')}}" class="w-full mt-2 p-2 border rounded-md @error('philhealthId') border-gray-300 @enderror " placeholder="00-00000000-0" maxlength="13">
-                                    <span class="text-gray-500 text-sm italic">Leave blank if not available.</span>
-                                    <p id="philhealthError" class="text-red-500 text-sm hidden">Continue typing until the designated format are met.  (00-00000000-0).</p>
-                                   
-                                </div>
-                            </div>
-
-                            <!-- PAGIBIG -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                                <div>
-                                    <label for="Pagibig" class="block text-sm font-medium text-gray-600">PAGIBIG:</label>
-                                    <input type="text" id="w_pagibig" name="Pagibig" value="{{ old('Pagibig') }}" class="w-full mt-2 p-2 border rounded-md @error('Pagibig') border-gray-300 @enderror" placeholder="0000-0000-0000" maxlength="14">
-                                    <span class="text-gray-500 text-sm italic">Leave blank if not available.</span>
-                                    <p id="pagibigError" class="text-red-500 text-sm hidden">Continue typing until the designated format are met.  (0000-0000-0000).</p>
-                                   
-                                </div>
-                            </div>
-
-                            <!-- TIN Number -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                                <div>
-                                    <label for="TIN" class="block text-sm font-medium text-gray-600">TIN Number:</label>
-                                    <input type="text" id="w_tin" name="TINno" value="{{ old('TINno') }}" class="w-full mt-2 p-2 border rounded-md @error('TINno') border-gray-300 @enderror" placeholder="000-000-000-000" maxlength="15" >
-                                    <span class="text-gray-500 text-sm italic">Leave blank if not available.</span>
-                                    <p id="tinError" class="text-red-500 text-sm hidden">Continue typing until the designated format are met.  (000-000-000-000).</p>
-                                   
-                                </div>
-                            </div>
+                </div>
+                    <!--general form-->
+                        <form action="{{ route('admin.InsertEmployeeData') }}" method="POST" class="space-y-5" onsubmit="showLoadingSpinner()"  enctype="multipart/form-data">
+                            
+                        @csrf
+                        <!--upload picture-->
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-gray-900 " for="file_input">Upload image</label>
+                            <input class="block w-1/4 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                id="file_input" 
+                                name="employee_images[]" 
+                                type="file" 
+                                multiple>
                         </div>
-                        <!--id formats-->
-                        <script>
-                            // Input mask functions for each format
-                            function applySSSMask(input) {
-                                input.value = input.value
-                                    .replace(/\D/g, '') // Remove non-digit characters
-                                    .replace(/^(\d{2})(\d{0,7})(\d{0,1})/, '$1-$2-$3') // Apply mask format
-                                    .slice(0, 12); // Limit length
-                            }
 
-                            function applyPhilHealthMask(input) {
-                                input.value = input.value
-                                    .replace(/\D/g, '')
-                                    .replace(/^(\d{2})(\d{0,8})(\d{0,1})/, '$1-$2-$3')
-                                    .slice(0, 13);
-                            }
+                            <!--Selecting Department-->
+                            <div class="p-5">
+                                <label for="department" class="block text-sm font-medium text-gray-600">Designated Department:</label>
+                                <select id="department" name="department" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500">
+                                    <option value="" disabled selected>Select a department</option>
+                                </select>
+                                @error('department')
+                                    <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
 
-                            function applyPagibigMask(input) {
-                                input.value = input.value
-                                    .replace(/\D/g, '')
-                                    .replace(/^(\d{4})(\d{0,4})(\d{0,4})/, '$1-$2-$3')
-                                    .slice(0, 14);
-                            }
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    fetchDepartments();
+                                });
 
-                            function applyTINMask(input) {
-                                input.value = input.value
-                                    .replace(/\D/g, '')
-                                    .replace(/^(\d{3})(\d{0,3})(\d{0,3})(\d{0,3})/, '$1-$2-$3-$4')
-                                    .slice(0, 15);
-                            }
-
-                            // Event listeners to apply masks on input
-                            document.getElementById('w_sss').addEventListener('input', function () {
-                                applySSSMask(this);
-                                validatePattern(this, /^\d{2}-\d{7}-\d{1}$/, 'sssError');
-                            });
-
-                            document.getElementById('w_philhealth').addEventListener('input', function () {
-                                applyPhilHealthMask(this);
-                                validatePattern(this, /^\d{2}-\d{8}-\d{1}$/, 'philhealthError');
-                            });
-
-                            document.getElementById('w_pagibig').addEventListener('input', function () {
-                                applyPagibigMask(this);
-                                validatePattern(this, /^\d{4}-\d{4}-\d{4}$/, 'pagibigError');
-                            });
-
-                            document.getElementById('w_tin').addEventListener('input', function () {
-                                applyTINMask(this);
-                                validatePattern(this, /^\d{3}-\d{3}-\d{3}-\d{3}$/, 'tinError');
-                            });
-
-                            // Function to validate the pattern and show error message
-                            function validatePattern(input, pattern, errorElementId) {
-                                const regex = new RegExp(pattern);
-                                const errorElement = document.getElementById(errorElementId);
-
-                                if (!regex.test(input.value)) {
-                                    errorElement.classList.remove('hidden');
-                                    input.classList.add('border-red-500');
-                                    input.classList.remove('border-gray-300');
-                                } else {
-                                    errorElement.classList.add('hidden');
-                                    input.classList.remove('border-red-500');
-                                    input.classList.add('border-gray-300');
+                                function fetchDepartments() {
+                                    fetch('/departments')
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            const departmentSelect = document.getElementById('department');
+                                            
+                                            data.forEach(department => {
+                                                const option = document.createElement('option');
+                                                option.value = department.department_ID;
+                                                option.textContent = department.department_name;
+                                                departmentSelect.appendChild(option);
+                                            });
+                                        })
+                                        .catch(error => {
+                                            console.error('Error fetching departments:', error);
+                                        });
                                 }
-                            }
-                        </script>
+                            </script>
 
-                    
-                        <!--Work History-->
-                    <div class="p-5">
-                        <h3 class="text-lg font-medium text-gray-800 text-left">-Work History-</h3>
-                        <div id="work-history-container" class="space-y-4 mt-6">
-                    <!-- Work History Entry Template -->
-                            <div class="work-history-entry p-4 bg-white border border-gray-300 rounded-md">
-                                <label for="job-title-1" class="block text-sm font-medium text-gray-700">Job Title:</label>
-                                <input type="text" id="job-title-1" name="job_titles[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                <!--personal information section-->
+                            <div class="p-5">
 
-                                <label for="Company" class="block text-sm font-medium text-gray-700">Company:</label>
-                                <input type="text" id="company" name="company[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                
+                            
+                                <h3 class="text-lg font-medium text-gray-800 text-left">-Personal Information-</h3>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                                     <div>
-                                        <label for="start-date-1" class="block text-sm font-medium text-gray-700 mt-4">Start Date</label>
-                                        <input type="date" id="start-date-1" name="start_dates[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                        <label for="firstName" class="block text-sm font-medium text-gray-600">First Name:  <span class="text-red-500">*</span></label>
+                                        <input type="text" id="w_firstName" name="firstName" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="First name" required>
+                                    
                                     </div>
                                     <div>
-                                        <label for="end-date-1" class="block text-sm font-medium text-gray-700 mt-4">End Date</label>
-                                        <input type="date" id="end-date-1" name="end_dates[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                        <label for="middleName" class="block text-sm font-medium text-gray-600">Middle Name:  <span class="text-red-500">*</span></label>
+                                        <input type="text" id="w_middleName" name="middleName" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Middle name" required>
+                                    
+                                    </div>
+                                    <div>
+                                        <label for="lastName" class="block text-sm font-medium text-gray-600">Last Name:  <span class="text-red-500">*</span></label>
+                                        <input type="text" id="w_lastName" name="lastName" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Last name" required>
+                                    
+                                    </div>
+
+                                    <div>
+                                        <label for="suffixes" class="block text-sm font-medium text-gray-600">Suffix:</label>
+                                        <select id="w_suffix" name="suffix_input" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500">
+                                            <option value="none">- -</option>
+                                            <option value="junior">JR</option>
+                                            <option value="second">II</option>
+                                            <option value="third">III</option>
+                                            <option value="fourth">IV</option>
+                                            <option value="fifth">V</option>
+                                            <option value="sixth">VI</option>
+                                        </select>
+                                    </div>
+                                
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                                    <div>
+                                        <label for="birthday" class="block text-sm font-medium text-gray-600">Birth date:  <span class="text-red-500">*</span></label>
+                                        <input type="date" id="w_birthdate" name="birthdate" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Birth date" required>
+                                    
+                                    </div>
+                                    <div>
+                                        <label for="birthplace" class="block text-sm font-medium text-gray-600">Birth place:  <span class="text-red-500">*</span></label>
+                                        <input type="text" id="w_birthplace" name="birthplace" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Birth place" required>
+                                    
+                                    </div>
+                                    <div>
+                                        <label for="civilstatus" class="block text-sm font-medium text-gray-600">Civil Status:  <span class="text-red-500">*</span></label>
+                                        <select id="w_civilstatus" name="civilstatus" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" required>
+                                            <option value="" disabled selected>Select your civil status</option>
+                                            <option value="Single">Single</option>
+                                            <option value="Married">Married</option>
+                                        </select>
+                                    
+                                    </div>
+                                </div>
+                            </div>
+
+                                <!--Contact information section-->
+                            <div class="p-5">
+                                <h3 class="text-lg font-medium text-gray-800 text-left">-Contact Information-</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                                    <div>
+                                        <label for="email" class="block text-sm font-medium text-gray-600">Email:  <span class="text-red-500">*</span></label>
+                                        <input type="email" id="w_email" name="Email" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Email" required>
+                                    
+                                    </div>
+                                    <div>
+                                        <label for="contactNo" class="block text-sm font-medium text-gray-600">Contact Number:  <span class="text-red-500">*</span></label>
+                                        <input type="text" id="w_contactNo" name="contactNumber" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Contact Number" required>
+                                    
+                                    </div>
+                                    <div>
+                                        <label for="telephoneNo" class="block text-sm font-medium text-gray-600">Telephone Number:</label>
+                                        <input type="text" id="w_telephoneNum" name="telephoneNumber" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Telephone Number">
+                                    
                                     </div>
                                 </div>
 
-                                <label for="Remarks" class="block text-sm font-medium text-gray-700">Remarks:</label>
-                                <input type="text" id="remarks" name="remarks[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                
-                                <button type="button" class="remove-entry mt-4 text-red-500 hover:text-red-700">
-                                    Remove
-                                </button>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                                    <div>
+                                        <label for="permaddress" class="block text-sm font-medium text-gray-600">Permanent Address:  <span class="text-red-500">*</span></label>
+                                        <input type="text" id="w_Currentaddress" name="PermanentAddress" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Permanent Address" required>
+                                    
+                                    </div>
+                                    <div>
+                                        <label for="currentaddress" class="block text-sm font-medium text-gray-600">Current Address:  <span class="text-red-500">*</span></label>
+                                        <input type="text" id="w_Currentaddress" name="CurrentAddress" class="w-full mt-2 p-2 border rounded-md border-gray-300 focus:ring focus:ring-blue-200 focus:border-blue-500" placeholder="Current Address" required>
+                                    
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                                <button type="button" id="add-work-history" class="mt-4 inline-flex items-center px-3 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                    </svg>
-                                    Add more Work History
-                                </button>
 
-                        <!--adding employee script-->
-                        <script>
-                            document.addEventListener('DOMContentLoaded', function() {
-                                let workHistoryCounter = 1;
+                                <!--Governement information-->
+                                <div class="p-5">
+                                    <h3 class="text-lg font-medium text-gray-800 text-left">-Government Identification-</h3>
+                                    
+                                    <!-- SSS ID -->
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                                        <div>
+                                            <label for="sssid" class="block text-sm font-medium text-gray-600">SSS ID:</label>
+                                            <input type="text" id="w_sss" name="sssId" value="{{ old('sssId') }}" class="w-full mt-2 p-2 border rounded-md @error('sssId') border-red-500 @enderror" placeholder="00-0000000-0" maxlength="12" >
+                                            <span class="text-gray-500 text-sm italic">Leave blank if not available.</span>
+                                            <p id="sssError" class="text-red-500 text-sm hidden">Continue typing until the designated format are met.  (00-0000000-0).</p>
+                                            
+                                        </div>
+                                        <div>
+                                            <label class="block mb-2 text-sm font-medium text-gray-900 " for="file_input">Upload scanned files <span class="text-sm italic font-normal">*if available</span></label>
+                                            <input class="block w-1/2 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file">
+                                        </div>
+                                    </div>
 
-                                // Event listener for adding new work history entry
-                                document.getElementById('add-work-history').addEventListener('click', function() {
-                                    workHistoryCounter++;
-                                    const container = document.getElementById('work-history-container');
-                                    const newEntry = document.createElement('div');
-                                    newEntry.className = 'work-history-entry p-4 bg-white border border-gray-300 rounded-md';
+                                    <!-- PhilHealth ID -->
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                                        <div>
+                                            <label for="philhealthid" class="block text-sm font-medium text-gray-600">PhilHealth ID:</label>
+                                            <input type="text" id="w_philhealth" name="philhealthId" value="{{ old('philhealthId')}}" class="w-full mt-2 p-2 border rounded-md @error('philhealthId') border-gray-300 @enderror " placeholder="00-00000000-0" maxlength="13">
+                                            <span class="text-gray-500 text-sm italic">Leave blank if not available.</span>
+                                            <p id="philhealthError" class="text-red-500 text-sm hidden">Continue typing until the designated format are met.  (00-00000000-0).</p>
+                                        
+                                        </div>
+                                    </div>
 
-                                    newEntry.innerHTML = `
-                                        <label for="job-title-${workHistoryCounter}" class="block text-sm font-medium text-gray-700">Job Title:</label>
-                                        <input type="text" id="job-title-${workHistoryCounter}" name="job_titles[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    <!-- PAGIBIG -->
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                                        <div>
+                                            <label for="Pagibig" class="block text-sm font-medium text-gray-600">PAGIBIG:</label>
+                                            <input type="text" id="w_pagibig" name="Pagibig" value="{{ old('Pagibig') }}" class="w-full mt-2 p-2 border rounded-md @error('Pagibig') border-gray-300 @enderror" placeholder="0000-0000-0000" maxlength="14">
+                                            <span class="text-gray-500 text-sm italic">Leave blank if not available.</span>
+                                            <p id="pagibigError" class="text-red-500 text-sm hidden">Continue typing until the designated format are met.  (0000-0000-0000).</p>
+                                        
+                                        </div>
+                                    </div>
 
-                                        <label for="company-${workHistoryCounter}" class="block text-sm font-medium text-gray-700 mt-4">Company:</label>
-                                        <input type="text" id="company-${workHistoryCounter}" name="companies[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    <!-- TIN Number -->
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                                        <div>
+                                            <label for="TIN" class="block text-sm font-medium text-gray-600">TIN Number:</label>
+                                            <input type="text" id="w_tin" name="TINno" value="{{ old('TINno') }}" class="w-full mt-2 p-2 border rounded-md @error('TINno') border-gray-300 @enderror" placeholder="000-000-000-000" maxlength="15" >
+                                            <span class="text-gray-500 text-sm italic">Leave blank if not available.</span>
+                                            <p id="tinError" class="text-red-500 text-sm hidden">Continue typing until the designated format are met.  (000-000-000-000).</p>
+                                        
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--id formats-->
+                                <script>
+                                    // Input mask functions for each format
+                                    function applySSSMask(input) {
+                                        input.value = input.value
+                                            .replace(/\D/g, '') // Remove non-digit characters
+                                            .replace(/^(\d{2})(\d{0,7})(\d{0,1})/, '$1-$2-$3') // Apply mask format
+                                            .slice(0, 12); // Limit length
+                                    }
+
+                                    function applyPhilHealthMask(input) {
+                                        input.value = input.value
+                                            .replace(/\D/g, '')
+                                            .replace(/^(\d{2})(\d{0,8})(\d{0,1})/, '$1-$2-$3')
+                                            .slice(0, 13);
+                                    }
+
+                                    function applyPagibigMask(input) {
+                                        input.value = input.value
+                                            .replace(/\D/g, '')
+                                            .replace(/^(\d{4})(\d{0,4})(\d{0,4})/, '$1-$2-$3')
+                                            .slice(0, 14);
+                                    }
+
+                                    function applyTINMask(input) {
+                                        input.value = input.value
+                                            .replace(/\D/g, '')
+                                            .replace(/^(\d{3})(\d{0,3})(\d{0,3})(\d{0,3})/, '$1-$2-$3-$4')
+                                            .slice(0, 15);
+                                    }
+
+                                    // Event listeners to apply masks on input
+                                    document.getElementById('w_sss').addEventListener('input', function () {
+                                        applySSSMask(this);
+                                        validatePattern(this, /^\d{2}-\d{7}-\d{1}$/, 'sssError');
+                                    });
+
+                                    document.getElementById('w_philhealth').addEventListener('input', function () {
+                                        applyPhilHealthMask(this);
+                                        validatePattern(this, /^\d{2}-\d{8}-\d{1}$/, 'philhealthError');
+                                    });
+
+                                    document.getElementById('w_pagibig').addEventListener('input', function () {
+                                        applyPagibigMask(this);
+                                        validatePattern(this, /^\d{4}-\d{4}-\d{4}$/, 'pagibigError');
+                                    });
+
+                                    document.getElementById('w_tin').addEventListener('input', function () {
+                                        applyTINMask(this);
+                                        validatePattern(this, /^\d{3}-\d{3}-\d{3}-\d{3}$/, 'tinError');
+                                    });
+
+                                    // Function to validate the pattern and show error message
+                                    function validatePattern(input, pattern, errorElementId) {
+                                        const regex = new RegExp(pattern);
+                                        const errorElement = document.getElementById(errorElementId);
+
+                                        if (!regex.test(input.value)) {
+                                            errorElement.classList.remove('hidden');
+                                            input.classList.add('border-red-500');
+                                            input.classList.remove('border-gray-300');
+                                        } else {
+                                            errorElement.classList.add('hidden');
+                                            input.classList.remove('border-red-500');
+                                            input.classList.add('border-gray-300');
+                                        }
+                                    }
+                                </script>
+
+                            
+                                <!--Work History-->
+                            <div class="p-5">
+                                <h3 class="text-lg font-medium text-gray-800 text-left">-Work History-</h3>
+                                <div id="work-history-container" class="space-y-4 mt-6">
+                            <!-- Work History Entry Template -->
+                                    <div class="work-history-entry p-4 bg-white border border-gray-300 rounded-md">
+                                        <label for="job-title-1" class="block text-sm font-medium text-gray-700">Job Title:</label>
+                                        <input type="text" id="job-title-1" name="job_titles[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+
+                                        <label for="Company" class="block text-sm font-medium text-gray-700">Company:</label>
+                                        <input type="text" id="company" name="company[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                         
                                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                                             <div>
-                                                <label for="start-date-${workHistoryCounter}" class="block text-sm font-medium text-gray-700 mt-4">Start Date:</label>
-                                                <input type="date" id="start-date-${workHistoryCounter}" name="start_dates[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                <label for="start-date-1" class="block text-sm font-medium text-gray-700 mt-4">Start Date</label>
+                                                <input type="date" id="start-date-1" name="start_dates[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                             </div>
                                             <div>
-                                                <label for="end-date-${workHistoryCounter}" class="block text-sm font-medium text-gray-700 mt-4">End Date:</label>
-                                                <input type="date" id="end-date-${workHistoryCounter}" name="end_dates[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                <label for="end-date-1" class="block text-sm font-medium text-gray-700 mt-4">End Date</label>
+                                                <input type="date" id="end-date-1" name="end_dates[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                             </div>
                                         </div>
 
-                                        <label for="remarks-${workHistoryCounter}" class="block text-sm font-medium text-gray-700 mt-4">Remarks:</label>
-                                        <input type="text" id="remarks-${workHistoryCounter}" name="remarks[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-
+                                        <label for="Remarks" class="block text-sm font-medium text-gray-700">Remarks:</label>
+                                        <input type="text" id="remarks" name="remarks[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                        
                                         <button type="button" class="remove-entry mt-4 text-red-500 hover:text-red-700">
                                             Remove
                                         </button>
-                                    `;
-
-                                    container.appendChild(newEntry);
-
-                                    // Add event listener to the new remove button
-                                    newEntry.querySelector('.remove-entry').addEventListener('click', function() {
-                                        newEntry.remove();
-                                    });
-                                });
-
-                                // Initial event listener for existing remove buttons
-                                document.querySelectorAll('.remove-entry').forEach(button => {
-                                    button.addEventListener('click', function() {
-                                        button.parentElement.remove();
-                                    });
-                                });
-                            });
-                        </script>
-
-                    </div>
-
-                <!--education background-->
-                <div class="p-5">
-                    <h3 class="text-lg font-medium text-gray-800 text-left">-Educational Background-</h3>
-                    <div class="p-5">
-
-                    <!-- High School Section -->
-                    <div class="mt-6">
-                        <h4 class="text-md font-medium text-gray-700">High School</h4>
-                        <div id="high-school-container" class="space-y-4">
-                            <!-- High School Entry Template -->
-                            <div class="high-school-entry p-4 bg-white border border-gray-300 rounded-md">
-                                <label for="high-school-name-1" class="block text-sm font-medium text-gray-700">School Name:</label>
-                                <input type="text" id="high-school-name-1" name="high_school_names[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                                    <div>
-                                        <label for="high-school-start-date-1" class="block text-sm font-medium text-gray-700 mt-4">Start Date:</label>
-                                        <input type="date" id="high-school-start-date-1" name="high_school_start_dates[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                    </div>
-                                    <div>
-                                        <label for="high-school-end-date-1" class="block text-sm font-medium text-gray-700 mt-4">End Date:</label>
-                                        <input type="date" id="high-school-end-date-1" name="high_school_end_dates[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                     </div>
                                 </div>
+                                        <button type="button" id="add-work-history" class="mt-4 inline-flex items-center px-3 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                            </svg>
+                                            Add more Work History
+                                        </button>
 
-                                <button type="button" class="remove-high-school-entry mt-4 text-red-500 hover:text-red-700">
-                                    Remove
-                                </button>
+                                <!--adding employee script-->
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        let workHistoryCounter = 1;
+
+                                        // Event listener for adding new work history entry
+                                        document.getElementById('add-work-history').addEventListener('click', function() {
+                                            workHistoryCounter++;
+                                            const container = document.getElementById('work-history-container');
+                                            const newEntry = document.createElement('div');
+                                            newEntry.className = 'work-history-entry p-4 bg-white border border-gray-300 rounded-md';
+
+                                            newEntry.innerHTML = `
+                                                <label for="job-title-${workHistoryCounter}" class="block text-sm font-medium text-gray-700">Job Title:</label>
+                                                <input type="text" id="job-title-${workHistoryCounter}" name="job_titles[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+
+                                                <label for="company-${workHistoryCounter}" class="block text-sm font-medium text-gray-700 mt-4">Company:</label>
+                                                <input type="text" id="company-${workHistoryCounter}" name="companies[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                
+                                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                                                    <div>
+                                                        <label for="start-date-${workHistoryCounter}" class="block text-sm font-medium text-gray-700 mt-4">Start Date:</label>
+                                                        <input type="date" id="start-date-${workHistoryCounter}" name="start_dates[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                    </div>
+                                                    <div>
+                                                        <label for="end-date-${workHistoryCounter}" class="block text-sm font-medium text-gray-700 mt-4">End Date:</label>
+                                                        <input type="date" id="end-date-${workHistoryCounter}" name="end_dates[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                    </div>
+                                                </div>
+
+                                                <label for="remarks-${workHistoryCounter}" class="block text-sm font-medium text-gray-700 mt-4">Remarks:</label>
+                                                <input type="text" id="remarks-${workHistoryCounter}" name="remarks[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+
+                                                <button type="button" class="remove-entry mt-4 text-red-500 hover:text-red-700">
+                                                    Remove
+                                                </button>
+                                            `;
+
+                                            container.appendChild(newEntry);
+
+                                            // Add event listener to the new remove button
+                                            newEntry.querySelector('.remove-entry').addEventListener('click', function() {
+                                                newEntry.remove();
+                                            });
+                                        });
+
+                                        // Initial event listener for existing remove buttons
+                                        document.querySelectorAll('.remove-entry').forEach(button => {
+                                            button.addEventListener('click', function() {
+                                                button.parentElement.remove();
+                                            });
+                                        });
+                                    });
+                                </script>
+
                             </div>
-                        </div>
-                        
-                        <button type="button" id="add-high-school" class="mt-4 inline-flex items-center px-3 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                            </svg>
-                            Add High School
-                        </button>
-                    </div>
 
-                    <!-- College Section -->
-                    <div class="mt-6">
-                        <h4 class="text-md font-medium text-gray-700">College</h4>
-                        <div id="college-container" class="space-y-4">
-                            <!-- College Entry Template -->
-                            <div class="college-entry p-4 bg-white border border-gray-300 rounded-md">
-                                <label for="college-name-1" class="block text-sm font-medium text-gray-700">School Name:</label>
-                                <input type="text" id="college-name-1" name="college_names[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                
-                                <label for="course-1" class="block text-sm font-medium text-gray-700 mt-4">Course:</label>
-                                <input type="text" id="course-1" name="courses[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                                    <div>
-                                        <label for="college-start-date-1" class="block text-sm font-medium text-gray-700 mt-4">Start Date:</label>
-                                        <input type="date" id="college-start-date-1" name="college_start_dates[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                    </div>
-                                    <div>
-                                        <label for="college-end-date-1" class="block text-sm font-medium text-gray-700 mt-4">End Date:</label>
-                                        <input type="date" id="college-end-date-1" name="college_end_dates[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                    </div>
-                                </div>
+                        <!--education background-->
+                        <div class="p-5">
+                            <h3 class="text-lg font-medium text-gray-800 text-left">-Educational Background-</h3>
+                            <div class="p-5">
 
-                                <label for="achievement-1" class="block text-sm font-medium text-gray-700 mt-4">Academic Achievement:</label>
-                                <input type="text" id="achievement-1" name="achievements[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-
-                                <button type="button" class="remove-college-entry mt-4 text-red-500 hover:text-red-700">
-                                    Remove
-                                </button>
-                            </div>
-                        </div>
-
-                        <button type="button" id="add-college" class="mt-4 inline-flex items-center px-3 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                            </svg>
-                            Add College
-                        </button>
-                    </div>
-                </div>
-                        <!--add schools script-->
-                        <script>
-                            document.addEventListener('DOMContentLoaded', function() {
-                                let highSchoolCounter = 1;
-                                let collegeCounter = 1;
-
-                                // High School: Add Entry
-                                document.getElementById('add-high-school').addEventListener('click', function() {
-                                    highSchoolCounter++;
-                                    const container = document.getElementById('high-school-container');
-                                    const newEntry = document.createElement('div');
-                                    newEntry.className = 'high-school-entry p-4 bg-white border border-gray-300 rounded-md';
-
-                                    newEntry.innerHTML = `
-                                        <label for="high-school-name-${highSchoolCounter}" class="block text-sm font-medium text-gray-700">School Name:</label>
-                                        <input type="text" id="high-school-name-${highSchoolCounter}" name="high_school_names[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <!-- High School Section -->
+                            <div class="mt-6">
+                                <h4 class="text-md font-medium text-gray-700">High School</h4>
+                                <div id="high-school-container" class="space-y-4">
+                                    <!-- High School Entry Template -->
+                                    <div class="high-school-entry p-4 bg-white border border-gray-300 rounded-md">
+                                        <label for="high-school-name-1" class="block text-sm font-medium text-gray-700">School Name:</label>
+                                        <input type="text" id="high-school-name-1" name="high_school_names[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                         
                                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                                             <div>
-                                                <label for="high-school-start-date-${highSchoolCounter}" class="block text-sm font-medium text-gray-700 mt-4">Start Date:</label>
-                                                <input type="date" id="high-school-start-date-${highSchoolCounter}" name="high_school_start_dates[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                <label for="high-school-start-date-1" class="block text-sm font-medium text-gray-700 mt-4">Start Date:</label>
+                                                <input type="date" id="high-school-start-date-1" name="high_school_start_dates[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                             </div>
                                             <div>
-                                                <label for="high-school-end-date-${highSchoolCounter}" class="block text-sm font-medium text-gray-700 mt-4">End Date:</label>
-                                                <input type="date" id="high-school-end-date-${highSchoolCounter}" name="high_school_end_dates[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                <label for="high-school-end-date-1" class="block text-sm font-medium text-gray-700 mt-4">End Date:</label>
+                                                <input type="date" id="high-school-end-date-1" name="high_school_end_dates[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                             </div>
                                         </div>
 
                                         <button type="button" class="remove-high-school-entry mt-4 text-red-500 hover:text-red-700">
                                             Remove
                                         </button>
-                                    `;
+                                    </div>
+                                </div>
+                                
+                                <button type="button" id="add-high-school" class="mt-4 inline-flex items-center px-3 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                    </svg>
+                                    Add High School
+                                </button>
+                            </div>
 
-                                    container.appendChild(newEntry);
-
-                                    // Add event listener to the new remove button
-                                    newEntry.querySelector('.remove-high-school-entry').addEventListener('click', function() {
-                                        newEntry.remove();
-                                    });
-                                });
-
-                                // High School: Initial Remove Button
-                                document.querySelectorAll('.remove-high-school-entry').forEach(button => {
-                                    button.addEventListener('click', function() {
-                                        button.parentElement.remove();
-                                    });
-                                });
-
-                                // College: Add Entry
-                                document.getElementById('add-college').addEventListener('click', function() {
-                                    collegeCounter++;
-                                    const container = document.getElementById('college-container');
-                                    const newEntry = document.createElement('div');
-                                    newEntry.className = 'college-entry p-4 bg-white border border-gray-300 rounded-md';
-
-                                    newEntry.innerHTML = `
-                                        <label for="college-name-${collegeCounter}" class="block text-sm font-medium text-gray-700">School Name:</label>
-                                        <input type="text" id="college-name-${collegeCounter}" name="college_names[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <!-- College Section -->
+                            <div class="mt-6">
+                                <h4 class="text-md font-medium text-gray-700">College</h4>
+                                <div id="college-container" class="space-y-4">
+                                    <!-- College Entry Template -->
+                                    <div class="college-entry p-4 bg-white border border-gray-300 rounded-md">
+                                        <label for="college-name-1" class="block text-sm font-medium text-gray-700">School Name:</label>
+                                        <input type="text" id="college-name-1" name="college_names[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                         
-                                        <label for="course-${collegeCounter}" class="block text-sm font-medium text-gray-700 mt-4">Course:</label>
-                                        <input type="text" id="course-${collegeCounter}" name="courses[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                        <label for="course-1" class="block text-sm font-medium text-gray-700 mt-4">Course:</label>
+                                        <input type="text" id="course-1" name="courses[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                         
                                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                                             <div>
-                                                <label for="college-start-date-${collegeCounter}" class="block text-sm font-medium text-gray-700 mt-4">Start Date:</label>
-                                                <input type="date" id="college-start-date-${collegeCounter}" name="college_start_dates[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                <label for="college-start-date-1" class="block text-sm font-medium text-gray-700 mt-4">Start Date:</label>
+                                                <input type="date" id="college-start-date-1" name="college_start_dates[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                             </div>
                                             <div>
-                                                <label for="college-end-date-${collegeCounter}" class="block text-sm font-medium text-gray-700 mt-4">End Date:</label>
-                                                <input type="date" id="college-end-date-${collegeCounter}" name="college_end_dates[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                <label for="college-end-date-1" class="block text-sm font-medium text-gray-700 mt-4">End Date:</label>
+                                                <input type="date" id="college-end-date-1" name="college_end_dates[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                             </div>
                                         </div>
 
-                                        <label for="achievement-${collegeCounter}" class="block text-sm font-medium text-gray-700 mt-4">Academic Achievement:</label>
-                                        <input type="text" id="achievement-${collegeCounter}" name="achievements[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                        <label for="achievement-1" class="block text-sm font-medium text-gray-700 mt-4">Academic Achievement:</label>
+                                        <input type="text" id="achievement-1" name="achievements[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 
                                         <button type="button" class="remove-college-entry mt-4 text-red-500 hover:text-red-700">
                                             Remove
                                         </button>
-                                    `;
+                                    </div>
+                                </div>
 
-                                    container.appendChild(newEntry);
+                                <button type="button" id="add-college" class="mt-4 inline-flex items-center px-3 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                    </svg>
+                                    Add College
+                                </button>
+                            </div>
+                        </div>
+                                <!--add schools script-->
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        let highSchoolCounter = 1;
+                                        let collegeCounter = 1;
 
-                                    // Add event listener to the new remove button
-                                    newEntry.querySelector('.remove-college-entry').addEventListener('click', function() {
-                                        newEntry.remove();
+                                        // High School: Add Entry
+                                        document.getElementById('add-high-school').addEventListener('click', function() {
+                                            highSchoolCounter++;
+                                            const container = document.getElementById('high-school-container');
+                                            const newEntry = document.createElement('div');
+                                            newEntry.className = 'high-school-entry p-4 bg-white border border-gray-300 rounded-md';
+
+                                            newEntry.innerHTML = `
+                                                <label for="high-school-name-${highSchoolCounter}" class="block text-sm font-medium text-gray-700">School Name:</label>
+                                                <input type="text" id="high-school-name-${highSchoolCounter}" name="high_school_names[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                
+                                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                                                    <div>
+                                                        <label for="high-school-start-date-${highSchoolCounter}" class="block text-sm font-medium text-gray-700 mt-4">Start Date:</label>
+                                                        <input type="date" id="high-school-start-date-${highSchoolCounter}" name="high_school_start_dates[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                    </div>
+                                                    <div>
+                                                        <label for="high-school-end-date-${highSchoolCounter}" class="block text-sm font-medium text-gray-700 mt-4">End Date:</label>
+                                                        <input type="date" id="high-school-end-date-${highSchoolCounter}" name="high_school_end_dates[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                    </div>
+                                                </div>
+
+                                                <button type="button" class="remove-high-school-entry mt-4 text-red-500 hover:text-red-700">
+                                                    Remove
+                                                </button>
+                                            `;
+
+                                            container.appendChild(newEntry);
+
+                                            // Add event listener to the new remove button
+                                            newEntry.querySelector('.remove-high-school-entry').addEventListener('click', function() {
+                                                newEntry.remove();
+                                            });
+                                        });
+
+                                        // High School: Initial Remove Button
+                                        document.querySelectorAll('.remove-high-school-entry').forEach(button => {
+                                            button.addEventListener('click', function() {
+                                                button.parentElement.remove();
+                                            });
+                                        });
+
+                                        // College: Add Entry
+                                        document.getElementById('add-college').addEventListener('click', function() {
+                                            collegeCounter++;
+                                            const container = document.getElementById('college-container');
+                                            const newEntry = document.createElement('div');
+                                            newEntry.className = 'college-entry p-4 bg-white border border-gray-300 rounded-md';
+
+                                            newEntry.innerHTML = `
+                                                <label for="college-name-${collegeCounter}" class="block text-sm font-medium text-gray-700">School Name:</label>
+                                                <input type="text" id="college-name-${collegeCounter}" name="college_names[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                
+                                                <label for="course-${collegeCounter}" class="block text-sm font-medium text-gray-700 mt-4">Course:</label>
+                                                <input type="text" id="course-${collegeCounter}" name="courses[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                
+                                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                                                    <div>
+                                                        <label for="college-start-date-${collegeCounter}" class="block text-sm font-medium text-gray-700 mt-4">Start Date:</label>
+                                                        <input type="date" id="college-start-date-${collegeCounter}" name="college_start_dates[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                    </div>
+                                                    <div>
+                                                        <label for="college-end-date-${collegeCounter}" class="block text-sm font-medium text-gray-700 mt-4">End Date:</label>
+                                                        <input type="date" id="college-end-date-${collegeCounter}" name="college_end_dates[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                    </div>
+                                                </div>
+
+                                                <label for="achievement-${collegeCounter}" class="block text-sm font-medium text-gray-700 mt-4">Academic Achievement:</label>
+                                                <input type="text" id="achievement-${collegeCounter}" name="achievements[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+
+                                                <button type="button" class="remove-college-entry mt-4 text-red-500 hover:text-red-700">
+                                                    Remove
+                                                </button>
+                                            `;
+
+                                            container.appendChild(newEntry);
+
+                                            // Add event listener to the new remove button
+                                            newEntry.querySelector('.remove-college-entry').addEventListener('click', function() {
+                                                newEntry.remove();
+                                            });
+                                        });
+
+                                        // College: Initial Remove Button
+                                        document.querySelectorAll('.remove-college-entry').forEach(button => {
+                                            button.addEventListener('click', function() {
+                                                button.parentElement.remove();
+                                            });
+                                        });
                                     });
-                                });
+                                </script>
 
-                                // College: Initial Remove Button
-                                document.querySelectorAll('.remove-college-entry').forEach(button => {
-                                    button.addEventListener('click', function() {
-                                        button.parentElement.remove();
-                                    });
-                                });
-                            });
-                        </script>
+                        </div>
 
+                        <!-- Submit Button -->
+                        <div class="flex justify-end mt-8">
+                            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                                Submit
+                            </button>
+                        </div>
+                        </form>
+                                    
+
+                    @if (session('success'))
+                        <div class="text-green-600 z-50">{{ session('success') }}</div>
+                    @endif
+
+                    @if (session('error'))
+                        <div class="text-red-500 z-50">{{ session('error') }}</div>
+                    @endif
+
+                    </div>
                 </div>
-
-                <!-- Submit Button -->
-                <div class="flex justify-end mt-8">
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-                        Submit
-                    </button>
-                </div>
-                </form>
-                            
-
-            @if (session('success'))
-                <div class="text-green-600 z-50">{{ session('success') }}</div>
-            @endif
-
-            @if (session('error'))
-                <div class="text-red-500 z-50">{{ session('error') }}</div>
-            @endif
-
-            </div>
-        </div>
     </section>
 
     <!--performance form section-->
@@ -2578,6 +2746,334 @@
         
     </section>
 
+    <!--department page full list-->
+    <section id = "department_page-content" class="section hidden w-full h-screen p-7">
+        <div class="w-full h-[85vh] h-[calc(100vh-100px)] overflow-y-auto p-5 mt-14 bg-white rounded-lg dark:bg-gray-700 shadow-lg">
+            <h1 class="font-bold text-2xl text-black dark:text-white mb-10">DEPARTMENTS</h1>
+
+            <div class="flex flex-col">
+                <!--office-->
+                <div class="flex flex-col gap-5 w-full items-start">
+                    <h1 class = "font-bold text-xl text-black dark:text-white">OFFICE:</h1>
+
+                    <!--1st row OFFICE-->
+                    <div class = "flex flex-row items-start gap-6 w-full">
+                        <!-- Admin Department -->
+                        <button class="department-btn flex flex-row p-5 gap-2 align-center justify-center items-center w-[35vh] h-[15vh] rounded-lg bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 shadow-xl dark:hover:bg-gray-500 hover:scale-105 transition duration-400" data-department-id="1">
+                            <img src="{{URL('images/admin.png')}}" alt="admin_department" class="w-[10vh]">
+                            <div class="flex flex-col items-center">
+                                <h2 class="font-bold text-lg text-black dark:text-white text-nowrap text-left">Human Resources</h2>
+                                <p class="text-xs italic text-black dark:text-white opacity-70">Number of Employees:</p>
+                                <h1 id="admin1-count" class="font-bold text-3xl text-black dark:text-white">Loading...</h1>
+                            </div>
+                        </button>
+
+                        <!-- MSIT Department -->
+                        <button class="department-btn flex flex-row p-5 gap-2 align-center justify-center items-center w-[35vh] h-[15vh] rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 shadow-xl dark:hover:bg-gray-300 hover:scale-105 transition duration-400" data-department-id="2">
+                            <img src="{{URL('images/msit.png')}}" alt="msit_department" class="w-[10vh]">
+                            <div class="flex flex-col items-center">
+                                <h2 class="font-bold text-lg text-black dark:text-white text-wrap text-left">MSIT</h2>
+                                <p class="text-xs italic text-black dark:text-white opacity-70">Number of Employees:</p>
+                                <h1 id="msit1-count" class="font-bold text-3xl text-black dark:text-white">Loading...</h1>
+                            </div>
+                        </button>
+
+                        <!-- Purchasing Department -->
+                        <button class="department-btn flex flex-row p-5 gap-2 align-center justify-center items-center w-[35vh] h-[15vh] rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 shadow-xl dark:hover:bg-gray-300 hover:scale-105 transition duration-400" data-department-id="3">
+                            <img src="{{URL('images/purchasing.png')}}" alt="purchasing_department" class="w-[10vh]">
+                            <div class="flex flex-col items-center">
+                                <h2 class="font-bold text-lg text-black dark:text-white text-wrap text-left">Purchasing</h2>
+                                <p class="text-xs italic text-black dark:text-white opacity-70">Number of Employees:</p>
+                                <h1 id="purchasing-count" class="font-bold text-3xl text-black dark:text-white">Loading...</h1>
+                            </div>
+                        </button>
+
+                        <!-- Shipping Department -->
+                        <button class="department-btn flex flex-row p-5 gap-2 align-center justify-center items-center w-[35vh] h-[15vh] rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 shadow-xl dark:hover:bg-gray-300 hover:scale-105 transition duration-400" data-department-id="4">
+                            <img src="{{URL('images/shipping.png')}}" alt="shipping_department" class="w-[10vh]">
+                            <div class="flex flex-col items-center">
+                                <h2 class="font-bold text-lg text-black dark:text-white text-wrap text-left">Shipping</h2>
+                                <p class="text-xs italic text-black dark:text-white opacity-70">Number of Employees:</p>
+                                <h1 id="shipping-count" class="font-bold text-3xl text-black dark:text-white">Loading...</h1>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!--2nd row OFFICE-->
+                    <div class = "flex flex-row items-start gap-6 w-full">
+                        <!-- Accounting Department -->
+                        <button class="department-btn flex flex-row p-5 gap-2 align-center justify-center items-center w-[35vh] h-[15vh] rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 shadow-xl dark:hover:bg-gray-300 hover:scale-105 transition duration-400" data-department-id="5">
+                            <img src="{{URL('images/accounting.png')}}" alt="admin_department" class="w-[10vh]">
+                            <div class="flex flex-col items-center">
+                                <h2 class="font-bold text-lg text-black dark:text-white text-nowrap text-left">Accounting</h2>
+                                <p class="text-xs italic text-black dark:text-white opacity-70">Number of Employees:</p>
+                                <h1 id="accounting-count" class="font-bold text-3xl text-black dark:text-white">Loading...</h1>
+                            </div>
+                        </button>
+
+                        <!-- Sales Marketing Department -->
+                        <button class="department-btn flex flex-row p-5 gap-2 align-center justify-center items-center w-[35vh] h-[15vh] rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 shadow-xl dark:hover:bg-gray-300 hover:scale-105 transition duration-400" data-department-id="6">
+                            <img src="{{URL('images/salesmarketing.png')}}" alt="msit_department" class="w-[10vh]">
+                            <div class="flex flex-col items-center">
+                                <h2 class="font-bold text-lg text-black dark:text-white text-wrap text-left">Sales Marketing</h2>
+                                <p class="text-xs italic text-black dark:text-white opacity-70">Number of Employees:</p>
+                                <h1 id="sales-count" class="font-bold text-3xl text-black dark:text-white">Loading...</h1>
+                            </div>
+                        </button>
+
+                        <!-- PPC Department -->
+                        <button class="department-btn flex flex-row p-5 gap-2 align-center justify-center items-center w-[35vh] h-[15vh] rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 shadow-xl dark:hover:bg-gray-300 hover:scale-105 transition duration-400"  data-department-id="7">
+                            <img src="{{URL('images/ppc.png')}}" alt="purchasing_department" class="w-[10vh]">
+                            <div class="flex flex-col items-center">
+                                <h2 class="font-bold text-lg text-black dark:text-white text-wrap text-left">PPC</h2>
+                                <p class="text-xs italic text-black dark:text-white opacity-70">Number of Employees:</p>
+                                <h1 id="ppc-count" class="font-bold text-3xl text-black dark:text-white">Loading...</h1>
+                            </div>
+                        </button>
+
+                        <!-- Technical Department -->
+                        <button class="department-btn flex flex-row p-5 gap-2 align-start justify-center items-center w-[35vh] h-[15vh] rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 shadow-xl dark:hover:bg-gray-300 hover:scale-105 transition duration-400"  data-department-id="8">
+                            <img src="{{URL('images/technical.png')}}" alt="shipping_department" class="w-[10vh]">
+                            <div class="flex flex-col items-center">
+                                <h2 class="font-bold text-lg text-black dark:text-white text-wrap text-left">Technical</h2>
+                                <p class="text-xs italic text-black dark:text-white opacity-70">Number of Employees:</p>
+                                <h1 id="technical1-count" class="font-bold text-3xl text-black dark:text-white">Loading...</h1>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!--PRODUCTION-->
+                <div class="flex flex-col gap-5 w-full items-start mt-10">
+                    <h1 class = "font-bold text-xl text-black dark:text-white">PRODUCTION:</h1>
+
+                    <div class = "flex flex-row items-start gap-6 w-full">
+                        <!-- Packing Department -->
+                        <button class="department-btn flex flex-row p-5 gap-2 align-center justify-center items-center w-[35vh] h-[15vh] rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 shadow-xl dark:hover:bg-gray-300 hover:scale-105 transition duration-400" data-department-id="9">
+                            <img src="{{URL('images/packing.png')}}" alt="admin_department" class="w-[10vh]">
+                            <div class="flex flex-col items-center">
+                                <h2 class="font-bold text-lg text-black dark:text-white text-nowrap text-left">Packing</h2>
+                                <p class="text-xs italic text-black dark:text-white opacity-70">Number of Employees:</p>
+                                <h1 id="packing-count" class="font-bold text-3xl text-black dark:text-white">Loading...</h1>
+                            </div>
+                        </button>
+
+                         <!-- Mixer Department -->
+                        <button class="department-btn flex flex-row p-5 gap-2 align-center justify-center items-center w-[35vh] h-[15vh] rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 shadow-xl dark:hover:bg-gray-300 hover:scale-105 transition duration-400" data-department-id="10">
+                            <img src="{{URL('images/mixer.png')}}" alt="admin_department" class="w-[10vh]">
+                            <div class="flex flex-col items-center">
+                                <h2 class="font-bold text-lg text-black dark:text-white text-nowrap text-left">Mixer</h2>
+                                <p class="text-xs italic text-black dark:text-white opacity-70">Number of Employees:</p>
+                                <h1 id="mixer-count" class="font-bold text-3xl text-black dark:text-white">Loading...</h1>
+                            </div>
+                        </button>
+
+                        <!-- RollerMill Department -->
+                        <button class="department-btn flex flex-row p-5 gap-2 align-center justify-center items-center w-[35vh] h-[15vh] rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 shadow-xl dark:hover:bg-gray-300 hover:scale-105 transition duration-400" data-department-id="11">
+                            <img src="{{URL('images/rollermill.png')}}" alt="admin_department" class="w-[10vh]">
+                            <div class="flex flex-col items-center">
+                                <h2 class="font-bold text-lg text-black dark:text-white text-nowrap text-left">Rollermill</h2>
+                                <p class="text-xs italic text-black dark:text-white opacity-70">Number of Employees:</p>
+                                <h1 id="rollermill1-count" class="font-bold text-3xl text-black dark:text-white">Loading...</h1>
+                            </div>
+                        </button>
+
+                        <!-- sandmill Department -->
+                        <button class="department-btn flex flex-row p-5 gap-2 align-center justify-center items-center w-[35vh] h-[15vh] rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 shadow-xl dark:hover:bg-gray-300 hover:scale-105 transition duration-400" data-department-id="12">
+                            <img src="{{URL('images/sandmill.png')}}" alt="admin_department" class="w-[10vh]">
+                            <div class="flex flex-col items-center">
+                                <h2 class="font-bold text-lg text-black dark:text-white text-nowrap text-left">Sandmill</h2>
+                                <p class="text-xs italic text-black dark:text-white opacity-70">Number of Employees:</p>
+                                <h1 id="sandmill-count" class="font-bold text-3xl text-black dark:text-white">Loading...</h1>
+                            </div>
+                        </button>
+
+                    </div>
+
+                      <div class = "flex flex-row items-start gap-6 w-full">
+                        <!-- Weighning Department -->
+                        <button class="department-btn flex flex-row p-5 gap-2 align-center justify-center items-center w-[35vh] h-[15vh] rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 shadow-xl dark:hover:bg-gray-300 hover:scale-105 transition duration-400" data-department-id="13">
+                            <img src="{{URL('images/weighning.png')}}" alt="admin_department" class="w-[10vh]">
+                            <div class="flex flex-col items-center">
+                                <h2 class="font-bold text-lg text-black dark:text-white text-wrap text-left">Weighning & Premix</h2>
+                                <p class="text-xs italic text-black dark:text-white opacity-70">Number of Employees:</p>
+                                <h1 id="weighning-count" class="font-bold text-3xl text-black dark:text-white">Loading...</h1>
+                            </div>
+                        </button>
+
+                         <!-- Washing Department -->
+                        <button class="department-btn flex flex-row p-5 gap-2 align-center justify-center items-center w-[35vh] h-[15vh] rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 shadow-xl dark:hover:bg-gray-300 hover:scale-105 transition duration-400" data-department-id="14">
+                            <img src="{{URL('images/washing.png')}}" alt="admin_department" class="w-[10vh]">
+                            <div class="flex flex-col items-center">
+                                <h2 class="font-bold text-lg text-black dark:text-white text-nowrap text-left">Washing</h2>
+                                <p class="text-xs italic text-black dark:text-white opacity-70">Number of Employees:</p>
+                                <h1 id="washing-count" class="font-bold text-3xl text-black dark:text-white">Loading...</h1>
+                            </div>
+                        </button>
+
+                        <!-- RG Warehouse Department -->
+                        <button class="department-btn flex flex-row p-5 gap-2 align-center justify-center items-center w-[35vh] h-[15vh] rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 shadow-xl dark:hover:bg-gray-300 hover:scale-105 transition duration-400" data-department-id="15">
+                            <img src="{{URL('images/fgwarehouse.png')}}" alt="admin_department" class="w-[10vh]">
+                            <div class="flex flex-col items-center">
+                                <h2 class="font-bold text-lg text-black dark:text-white text-nowrap text-left">FG Warehouse</h2>
+                                <p class="text-xs italic text-black dark:text-white opacity-70">Number of Employees:</p>
+                                <h1 id="fgwarehouse-count" class="font-bold text-3xl text-black dark:text-white">Loading...</h1>
+                            </div>
+                        </button>
+
+                        <!-- RM WarehouseDepartment -->
+                        <button class="department-btn flex flex-row p-5 gap-2 align-center justify-center items-center w-[35vh] h-[15vh] rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 shadow-xl dark:hover:bg-gray-300 hover:scale-105 transition duration-400" data-department-id="16">
+                            <img src="{{URL('images/rmwarehouse.png')}}" alt="admin_department" class="w-[10vh]">
+                            <div class="flex flex-col items-center">
+                                <h2 class="font-bold text-lg text-black dark:text-white text-nowrap text-left">RM Warehouse</h2>
+                                <p class="text-xs italic text-black dark:text-white opacity-70">Number of Employees:</p>
+                                <h1 id="rmwarehouse-count" class="font-bold text-3xl text-black dark:text-white">Loading...</h1>
+                            </div>
+                        </button>
+
+                    </div>
+                </div>
+
+                    <!--script for department page employee counter-->
+                      <script>
+                        function fetchDepartmentEmployeeCounts() {
+                            fetch('/department-employee-counts')
+                                .then(response => response.json())
+                                .then(data => {
+                                    const counts = data.departmentEmployeeCounts;
+                                    
+                                    // Update the employee count for each department
+                                    document.getElementById('admin1-count').textContent = counts[1] || '0'; 
+                                    document.getElementById('msit1-count').textContent = counts[2] || '0'; 
+                                    document.getElementById('purchasing-count').textContent = counts[3] || '0';
+                                    document.getElementById('shipping-count').textContent = counts[4] || '0';
+                                    document.getElementById('accounting-count').textContent = counts[5] || '0'; 
+                                    document.getElementById('sales-count').textContent = counts[6] || '0';
+                                    document.getElementById('ppc-count').textContent = counts[7] || '0'; 
+                                    document.getElementById('technical1-count').textContent = counts[8] || '0'; 
+                                    document.getElementById('packing-count').textContent = counts[9] || '0'; 
+                                    document.getElementById('mixer-count').textContent = counts[10] || '0'; 
+                                    document.getElementById('rollermill1-count').textContent = counts[11] || '0';
+                                    document.getElementById('sandmill-count').textContent = counts[12] || '0';
+                                    document.getElementById('weighning-count').textContent = counts[13] || '0'; 
+                                    document.getElementById('washing-count').textContent = counts[14] || '0';
+                                    document.getElementById('fgwarehouse-count').textContent = counts[15] || '0'; 
+                                    document.getElementById('rmwarehouse-count').textContent = counts[16] || '0'; 
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching department employee counts:', error);
+                                    // Set default 0 if there's an error
+                                    document.getElementById('admin1-count').textContent = '0';
+                                    document.getElementById('msit1-count').textContent = '0';
+                                    document.getElementById('purchasing-count').textContent = '0';
+                                    document.getElementById('shipping-count').textContent = '0';
+                                    document.getElementById('accounting-count').textContent = '0';
+                                    document.getElementById('sales-count').textContent = '0';
+                                    document.getElementById('ppc-count').textContent = '0';
+                                    document.getElementById('technical1-count').textContent = '0';
+                                    document.getElementById('packing-count').textContent = '0';
+                                    document.getElementById('mixer-count').textContent = '0';
+                                    document.getElementById('rollermill1-count').textContent = '0';
+                                    document.getElementById('sandmill-count').textContent = '0';
+                                    document.getElementById('weighning-count').textContent = '0';
+                                    document.getElementById('washing-count').textContent = '0';
+                                    document.getElementById('fgwarehouse-count').textContent = '0';
+                                    document.getElementById('rmwarehouse-count').textContent = '0';
+                                });
+                        }
+
+                        // Fetch department employee counts when the page loads
+                        document.addEventListener('DOMContentLoaded', fetchDepartmentEmployeeCounts);
+
+                        // Optionally, refresh the count every minute
+                        setInterval(fetchDepartmentEmployeeCounts, 60000); // 60000 ms = 1 minute
+                    </script>
+            </div>
+        </div>
+
+       
+    </section>
+
+    <!-- Employee List Modal Department -->
+    <div id="employee-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-11/12 md:w-2/3 lg:w-1/2 p-5">
+            <h2 class="text-xl font-bold mb-4 dark:text-white">Employee List</h2>
+            <table class="min-w-full">
+                <thead>
+                    <tr class="bg-gray-100 dark:bg-gray-700">
+                        <th class="py-3 px-2 font-bold dark:text-white">Employee ID</th>
+                        <th class="py-3 px-2 font-bold dark:text-white">Employee Name</th>
+                        <th class="py-3 px-2 font-bold dark:text-white">Date Hired</th>
+                        <th class="py-3 px-2 font-bold dark:text-white">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="employee-list">
+                    <!-- Employee rows will be populated here -->
+                </tbody>
+            </table>
+            <button id="close-modal" class="mt-4 bg-red-500 text-white py-2 px-4 rounded">Close</button>
+        </div>
+    </div>
+            <!--script for department employee list modal-->
+        <script>
+            // Function to open the modal and fetch employee data
+            function fetchEmployeesByDepartment(departmentId) {
+                fetch(`/department-employees/${departmentId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const employeeList = document.getElementById('employee-list');
+                    employeeList.innerHTML = ''; // Clear previous data
+
+                    // Populate the employee list in the modal
+                    data.employees.forEach(employee => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                        <tr class="border-b border-gray-200 hover:bg-gray-200 dark:border-white opacity-70">
+                            <td class="py-2 px-2 dark:text-white">${employee.employee_ID}</td>
+                            <td class="py-2 px-4 dark:text-white text-center">${employee.employee_name}</td>
+                            <td class="py-2 px-4 dark:text-white text-center">${employee.date_hired}</td>
+
+                            <td class="py-2 px-6 items-center">
+                                <select class="employee-status rounded-lg border border-gray-300" data-employee-id="${employee.employee_ID}">
+                                    <option value="1" class="text-center" ${employee.status == 1 ? 'selected' : ''}>Active</option>
+                                    <option value="0" class="text-center" ${employee.status == 0 ? 'selected' : ''}>Inactive</option>
+                                </select>
+                            </td>
+                        </tr>
+                        `;
+                        employeeList.appendChild(row);
+                    });
+
+                    // Show the modal
+                    document.getElementById('employee-modal').classList.remove('hidden');
+
+                    // Add event listeners to status dropdowns
+                    document.querySelectorAll('.employee-status').forEach(select => {
+                        select.addEventListener('change', (event) => {
+                            const employeeId = event.target.getAttribute('data-employee-id');
+                            const newStatus = event.target.value;
+                            updateEmployeeStatus(employeeId, newStatus);
+                        });
+                    });
+                })
+                .catch(error => console.error('Error fetching employees:', error));
+            }
+
+            
+            // Add event listeners to department buttons
+            document.querySelectorAll('.department-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const departmentId = button.getAttribute('data-department-id');
+                    fetchEmployeesByDepartment(departmentId);
+                });
+            });
+
+            // Close the modal
+            document.getElementById('close-modal').addEventListener('click', () => {
+                document.getElementById('employee-modal').classList.add('hidden');
+            });
+        </script>
+
     <!--announcement all list section-->
     <section id ="announcement-content" class = "section hidden w-full h-screen p-7">
         
@@ -2598,89 +3094,89 @@
             </tbody>
         </table>
         </div>
-    <!--script for announcement all list section-->
-   <script>
+            <!--script for announcement all list section-->
+            <script>
 
-       document.addEventListener('DOMContentLoaded', function () {
-        fetchFullAnnouncements(); // Call this to fetch announcements when the page loads
-    });
-
-    // Fetch announcements from the backend and display them
-    function fetchFullAnnouncements() {
-        fetch('{{ route('admin.getAllAnnouncements') }}') // Make sure this matches your route for fetching announcements
-            .then(response => response.json())
-            .then(data => {
-                const announcements = data.announcements;
-                const announcementList = document.getElementById('full-announcement-list');
-                announcementList.innerHTML = ''; // Clear the existing content
-
-                if (announcements.length > 0) {
-                    announcements.forEach(announcement => {
-                        const employee = announcement.employee;
-                        const employeeName = employee ? `${employee.first_name} ${employee.last_name}`.trim() : 'Unknown'; // Combine first, middle, and last name
-                        const employeeDept = 'HR/Admin Department';
-                        const row = `
-                            <tr class="border-b border-gray-200 hover:bg-gray-500 dark:border-white opacity-70">
-                                <td class="px-4 py-2 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white opacity-100">
-                                    ${announcement.announce_subject}
-                                    <span class="block text-xs italic text-gray-500 dark:text-white opacity-60 font-light">
-                                        By: ${employeeName} - ${employeeDept}
-                                    </span>
-                                </td>
-                                <td class="px-4 py-2 text-sm text-gray-700 text-center dark:text-white">
-                                    ${new Date(announcement.date).toLocaleDateString()}
-                                </td>
-                                <td class="px-4 py-2 text-sm text-gray-700 text-center">
-                                    <button class="text-blue-500 hover:underline dark:text-red-400"  onclick="expandAnnouncement(${announcement.announce_ID})">View Details</button>
-                                </td>
-                            </tr>
-
-                            <!-- Hidden row for expanded details -->
-                            <tr id="announcement-details-${announcement.announce_ID}" class="hidden">
-                                <td colspan="3" class="px-4 py-2">
-                                    <div class="announcement-scroll" style="max-height: 200px; overflow-y: auto;  padding: 8px; border-radius: 8px;">
-                                        <p class="text-sm text-gray-700 dark:text-white pre-wrap">${announcement.announce_body}</p>
-                                    </div>
-                                    <button class="mt-2 text-red-500 hover:underline" onclick="collapseAnnouncement(${announcement.announce_ID})">Close</button>
-                                </td>
-                            </tr>
-                        `;
-                            announcementList.insertAdjacentHTML('beforeend', row);
-                        });
-                    } else {
-                        announcementList.innerHTML = `<tr><td colspan="3" class="text-center py-4 text-gray-500">No announcements available</td></tr>`;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching announcements:', error);
-                    document.getElementById('full-announcement-list').innerHTML = `<tr><td colspan="3" class="text-center py-4 text-red-500">Error loading announcements</td></tr>`;
+                document.addEventListener('DOMContentLoaded', function () {
+                    fetchFullAnnouncements(); // Call this to fetch announcements when the page loads
                 });
-        }
 
-        // Expand announcement details
-        function expandAnnouncement(announceId) {
+                // Fetch announcements from the backend and display them
+                function fetchFullAnnouncements() {
+                    fetch('{{ route('admin.getAllAnnouncements') }}') // Make sure this matches your route for fetching announcements
+                        .then(response => response.json())
+                        .then(data => {
+                            const announcements = data.announcements;
+                            const announcementList = document.getElementById('full-announcement-list');
+                            announcementList.innerHTML = ''; // Clear the existing content
 
-            // First, collapse all other open announcements
-            const allDetails = document.querySelectorAll('[id^="announcement-details-"]');
-            allDetails.forEach(detail => {
-                if (!detail.classList.contains('hidden')) {
-                    detail.classList.add('hidden'); // Hide all currently open details
-                }
-            });
-            const detailsRow = document.getElementById(`announcement-details-${announceId}`);
-            detailsRow.classList.remove('hidden'); // Show the details
-        }
+                            if (announcements.length > 0) {
+                                announcements.forEach(announcement => {
+                                    const employee = announcement.employee;
+                                    const employeeName = employee ? `${employee.first_name} ${employee.last_name}`.trim() : 'Unknown'; // Combine first, middle, and last name
+                                    const employeeDept = 'HR/Admin Department';
+                                    const row = `
+                                        <tr class="border-b border-gray-200 hover:bg-gray-200 dark:border-white opacity-70">
+                                            <td class="px-4 py-2 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white opacity-100">
+                                                ${announcement.announce_subject}
+                                                <span class="block text-xs italic text-gray-500 dark:text-white opacity-60 font-light">
+                                                    By: ${employeeName} - ${employeeDept}
+                                                </span>
+                                            </td>
+                                            <td class="px-4 py-2 text-sm text-gray-700 text-center dark:text-white">
+                                                ${new Date(announcement.date).toLocaleDateString()}
+                                            </td>
+                                            <td class="px-4 py-2 text-sm text-gray-700 text-center">
+                                                <button class="text-blue-500 hover:underline dark:text-red-400"  onclick="expandAnnouncement(${announcement.announce_ID})">View Details</button>
+                                            </td>
+                                        </tr>
 
-         const announcementBody = detailsRow.querySelector('p');
-        announcementBody.classList.add('pre-wrap'); // Add the pre-wrap class
+                                        <!-- Hidden row for expanded details -->
+                                        <tr id="announcement-details-${announcement.announce_ID}" class="hidden">
+                                            <td colspan="3" class="px-4 py-2">
+                                                <div class="announcement-scroll" style="max-height: 200px; overflow-y: auto;  padding: 8px; border-radius: 8px;">
+                                                    <p class="text-sm text-gray-700 dark:text-white pre-wrap">${announcement.announce_body}</p>
+                                                </div>
+                                                <button class="mt-2 text-red-500 hover:underline" onclick="collapseAnnouncement(${announcement.announce_ID})">Close</button>
+                                            </td>
+                                        </tr>
+                                    `;
+                                        announcementList.insertAdjacentHTML('beforeend', row);
+                                    });
+                                } else {
+                                    announcementList.innerHTML = `<tr><td colspan="3" class="text-center py-4 text-gray-500">No announcements available</td></tr>`;
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error fetching announcements:', error);
+                                document.getElementById('full-announcement-list').innerHTML = `<tr><td colspan="3" class="text-center py-4 text-red-500">Error loading announcements</td></tr>`;
+                            });
+                    }
 
-        // Collapse announcement details
-        function collapseAnnouncement(announceId) {
-            const detailsRow = document.getElementById(`announcement-details-${announceId}`);
-            detailsRow.classList.add('hidden'); // Hide the details
-        }
+                    // Expand announcement details
+                    function expandAnnouncement(announceId) {
 
-    </script>
+                        // First, collapse all other open announcements
+                        const allDetails = document.querySelectorAll('[id^="announcement-details-"]');
+                        allDetails.forEach(detail => {
+                            if (!detail.classList.contains('hidden')) {
+                                detail.classList.add('hidden'); // Hide all currently open details
+                            }
+                        });
+                        const detailsRow = document.getElementById(`announcement-details-${announceId}`);
+                        detailsRow.classList.remove('hidden'); // Show the details
+                    }
+
+                    const announcementBody = detailsRow.querySelector('p');
+                    announcementBody.classList.add('pre-wrap'); // Add the pre-wrap class
+
+                    // Collapse announcement details
+                    function collapseAnnouncement(announceId) {
+                        const detailsRow = document.getElementById(`announcement-details-${announceId}`);
+                        detailsRow.classList.add('hidden'); // Hide the details
+                    }
+
+                </script>
     </section>
 
     <!--announce modal-->
@@ -2705,18 +3201,24 @@
                     <h2 class="text-md font-medium dark:text-white">
                         Announcement:
                     </h2>
-                    <textarea id="announcement" name="announce_body" class="w-full p-2 h-[10vh] rounded-lg border-2 border-gray-200" placeholder="announcement" required></textarea>
+                    <textarea id="announcement" name="announce_body" class="w-full p-2 h-[10vh] rounded-lg border-2 border-gray-200" placeholder="Announcement Body...." required></textarea>
                     </textarea>
                </div>
                
             </div>
 
-            <button class="w-[10vh] h-[5vh] rounded-lg shadow-md bg-blue-500 text-lg font-bold text-white text-center hover:scale-110 transition duration-200 ml-auto">
-                Post
-            </button>
-            <button id='closeButton' class="w-[10vh] h-[5vh] rounded-lg shadow-md bg-blue-500 text-lg font-bold text-white text-center hover:scale-110 transition duration-200 ml-auto">
-                Close
-            </button>
+            <!-- Button container -->
+            <div class="flex justify-between items-center mt-4">
+                <!-- Post button -->
+                <button class="w-[10vh] h-[5vh] rounded-lg shadow-md bg-blue-500 text-lg font-bold text-white text-center hover:scale-110 transition duration-200">
+                    Post
+                </button>
+
+                <!-- Close button -->
+                <button id="closeButton" type="button" class="w-[10vh] h-[5vh] rounded-lg shadow-md bg-red-500 text-lg font-bold text-white text-center hover:scale-110 transition duration-200">
+                    Close
+                </button>
+            </div>
             </form>
         </div>
     </div>
@@ -2852,8 +3354,6 @@
     
    
   <!--scripts for sections-->
-
-
 <script>
     // Prevent the default form submission (remove this line if it causes issues)
     // event.preventDefault();

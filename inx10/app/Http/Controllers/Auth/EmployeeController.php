@@ -9,6 +9,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Middleware\Authenticate;
 use Illuminate\Http\Request;
 use App\Models\EmployeeInformation;
+use App\Models\EmployeeDocuments;
+use App\Models\EmployeeOtherInfo;
 use Illuminate\Support\Facades\Log;
 use App\Models\EmployeeDepartment;
 use Illuminate\Support\Facades\DB;
@@ -36,18 +38,26 @@ class EmployeeController extends Controller
                 return response()->json(['count' => 0], 500); // Return 0 in case of an error
             }
         }
-
 /**
  * @SuppressWarnings(PHPMD.StaticAccess)
  */
-        public function create()
+
+        public function getDepartments()
         {
             $departments = EmployeeDepartment::all();
-            return view('admin', ['departments' => $departments]);
+            return response()->json($departments);
         }
 
         public function employee(){
             return view('employee');
+        }
+
+        public function admin(){
+            return view ('admin');
+        }
+
+        public function department(){
+            return view ('department');
         }
         
 
@@ -194,6 +204,31 @@ class EmployeeController extends Controller
                     'status' => true, // Assuming 'true' means the employee is active
                 ]);
 
+                 // Get uploaded images
+                    if ($request->hasFile('employee_images')) {
+                        $images = $request->file('employee_images');
+                        
+                        foreach ($images as $image) {
+                            // Validate image (you can customize the rules as needed)
+                            $request->validate([
+                                'employee_images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+                            ]);
+                            
+                            // Store the image
+                            $filename = time() . '_' . $image->getClientOriginalName(); // Unique filename
+                            $image->storeAs('uploads/employees', $filename, 'public'); // Store in the public disk
+
+                            // Insert into the employee_documents table
+                            DB::table('employee_documents')->insert([
+                                'employee_ID' => $employeeId,
+                                'filename' => $image->getClientOriginalName(),
+                                'document_file' => 'uploads/employees/' . $filename,
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ]);
+                        }
+                    }
+
                
         
                 // Redirect back to the same route with the fragment
@@ -232,7 +267,31 @@ class EmployeeController extends Controller
                     return response()->json(['departmentEmployeeCounts' => []], 500); // Return an empty array on error
                 }
             }
+/**
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ */
+            public function getEmployeesByDepartment($id)
+                {
+                    try {
+                        // Fetch employees by department ID from employee_history table
+                        $employees = EmployeeHistory::where('department_ID', $id)
+                        ->join('employee_information', 'employee_history.employee_ID', '=', 'employee_information.employee_ID')
+                        ->select(
+                            'employee_history.employee_ID',
+                            DB::raw("CONCAT(employee_information.first_name, ' ', COALESCE(employee_information.middle_name, ''), ' ', employee_information.last_name) as employee_name"),
+                            'employee_history.start_date as date_hired'
+                        )
+                        ->get();
 
+                        // Return the employees as JSON
+                        return response()->json(['employees' => $employees]);
+                    } catch (\Exception $e) {
+                        Log::error('Error fetching employees by department: ' . $e->getMessage());
+                        return response()->json(['employees' => []], 500); // Return an empty array on error
+                    }
+                }
+
+                
             public function showProfile()
                 {
                     $user = auth()->user(); 
@@ -246,5 +305,21 @@ class EmployeeController extends Controller
                 return view('admin', compact('user'));  // Pass user to the view
                 }
 
+                public function fetchBirthdays()
+                {
+                    $currentMonth = Carbon::now()->month;
+
+                    // Get all birthdays for the current month
+                    $birthdaysThisMonth = EmployeeOtherInfo::whereMonth('birth_date', $currentMonth)
+                        ->with('employee') // Load related employee information
+                        ->get();
+                
+                    return response()->json([
+                        'birthdaysThisMonth' => $birthdaysThisMonth,
+                    ]);
+                }
+                
+
+                
         }
     

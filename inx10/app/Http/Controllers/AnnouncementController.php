@@ -45,10 +45,22 @@ public function getAllAnnouncements()
         return response()->json(['announcements' => []], 500); // Return an empty array on error
     }
 }
+ /**
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ */
 
+ public function getAnnouncementsForEmployees()
+{
+    try {
+        // Fetch latest announcements, you can limit if necessary
+        $announcements = Announcement::orderBy('date', 'desc')->take(5)->get();
 
-
-  
+        return response()->json(['announcements' => $announcements]);
+    } catch (\Exception $e) {
+        Log::error('Error fetching announcements: ' . $e->getMessage());
+        return response()->json(['announcements' => []], 500);
+    }
+}
     /**
  * @SuppressWarnings(PHPMD.StaticAccess)
  */

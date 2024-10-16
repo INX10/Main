@@ -20,4 +20,11 @@ class EmployeeHistory extends Model
         'status'
 
     ];
+
+    public function employee() {
+        return $this->belongsTo(EmployeeInformation::class, 'employee_ID'); // Adjust 'employee_ID' to your actual foreign key
+    }
+
+    
+    
 }

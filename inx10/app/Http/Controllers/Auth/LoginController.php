@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; // Use the Auth facade
 use App\Models\UserLogin;
+use App\Http\Controllers\LeaveController; // Import the LeaveController
 
 
 /**
@@ -26,13 +27,14 @@ class LoginController extends Controller
         $credentials = $request->only('user_ID', 'password');
 
         // Find the user by user_ID
-        $user = UserLogin::where('user_ID', $credentials['user_ID'])->first();
+        $user = UserLogin::where('user_ID', $credentials['user_ID'])->with('employeeInfo')->first();
 
         // Check if the user exists and the password matches
         if ($user && $user->user_password === $credentials['password']) {
             // Log in the user
             $this->auth->login($user);
 
+            (new LeaveController())->updateLeaveBalances();
             // Redirect based on user_type
             switch ($user->user_type) {
                 case 1:

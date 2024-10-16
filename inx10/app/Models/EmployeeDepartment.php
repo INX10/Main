@@ -17,4 +17,6 @@ class EmployeeDepartment extends Model
 
     // If you want to specify which attributes can be mass assigned
     protected $fillable = ['department_name', 'department_description'];
+
+    
 }

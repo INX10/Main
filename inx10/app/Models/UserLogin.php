@@ -19,4 +19,9 @@ class UserLogin extends Authenticatable
     public $timestamps = false; // Disable timestamps if not needed
 
     // Add any additional methods or properties needed for your application
+
+    public function employeeInfo()
+        {
+            return $this->hasOne(EmployeeInformation::class, 'user_ID', 'user_ID');
+        }
 }
