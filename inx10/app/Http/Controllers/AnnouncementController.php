@@ -53,7 +53,7 @@ public function getAllAnnouncements()
 {
     try {
         // Fetch latest announcements, you can limit if necessary
-        $announcements = Announcement::orderBy('date', 'desc')->take(5)->get();
+        $announcements = Announcement::orderBy('date', 'desc')->take(7)->get();
 
         return response()->json(['announcements' => $announcements]);
     } catch (\Exception $e) {

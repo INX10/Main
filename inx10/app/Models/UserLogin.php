@@ -20,8 +20,18 @@ class UserLogin extends Authenticatable
 
     // Add any additional methods or properties needed for your application
 
-    public function employeeInfo()
-        {
-            return $this->hasOne(EmployeeInformation::class, 'user_ID', 'user_ID');
+    // Correct the relationship in UserLogin model
+public function employeeInfo() {
+    return $this->hasOne(EmployeeInformation::class, 'user_ID', 'user_ID');
+}
+
+
+        public function employeeInformation() {
+            return $this->hasMany(EmployeeInformation::class, 'employee_ID','employee_ID');
         }
+        public function employeeHistory()
+        {
+            return $this->hasOne(EmployeeHistory::class, 'employee_ID', 'user_ID');
+        }
+
 }

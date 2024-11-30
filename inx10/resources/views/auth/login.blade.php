@@ -39,7 +39,8 @@
             </div>
 
            
-            <form action="{{ route('login') }}" method="POST" onsubmit="showLoadingSpinner()">
+            <form action="{{ route('login.submit') }}" method="POST" onsubmit="showLoadingSpinner()">
+
                 @csrf
                 <div class="rounded-md shadow-sm">
                     <div class="mb-4">

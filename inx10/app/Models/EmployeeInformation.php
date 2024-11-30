@@ -29,6 +29,30 @@ class EmployeeInformation extends Model
     }
 
     public function employeeHistory() {
-        return $this->hasMany(EmployeeHistory::class, 'employee_ID');
+        return $this->hasMany(EmployeeHistory::class, 'employee_ID','employee_ID');
     }
+    public function employeeEval() {
+        return $this->hasMany(EmployeeEvaluation::class, 'employee_ID','employee_ID');
+    }
+    public function employeeEvaluation() {
+        return $this->hasMany(EmployeeEvaluation::class, 'rater_ID','employee_ID');
+    }
+
+    public function userLogin() {
+        return $this->hasMany(UserLogin::class, 'employee_ID','employee_ID');
+    }
+    public function userLoginUser() {
+        return $this->hasMany(UserLogin::class, 'user_ID','user_ID');
+    }
+
+    public function document()
+    {
+        return $this->hasOne(EmployeeDocument::class, 'employee_ID', 'employee_ID');
+    }
+
+    public function contactInfo()
+    {
+        return $this->hasOne(EmployeeContactInfo::class, 'employee_ID', 'employee_ID');
+    }
+
 }

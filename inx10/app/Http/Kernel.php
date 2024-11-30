@@ -67,6 +67,9 @@ class Kernel extends HttpKernel
     ];
 
     protected $routeMiddleware = [
+        'role.admin' => \App\Http\Middleware\RestrictAdminAccess::class,
+        'role.employee' => \App\Http\Middleware\RestrictEmployeeAccess::class,
+        'role.department' => \App\Http\Middleware\RestrictDepartmentAccess::class,
     ];
 
     

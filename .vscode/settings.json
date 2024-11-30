@@ -1,3 +1,5 @@
 {
-    "workbench.colorTheme": "Atom One Dark"
+    "workbench.colorTheme": "Maxence Gama",
+    "editor.autoClosingBrackets": "always",
+    "editor.autoClosingComments": "always"
 }
